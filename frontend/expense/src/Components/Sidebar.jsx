@@ -62,6 +62,14 @@ const Sidebar = () => {
         </li>
         <li>
           <button
+            onClick={() => navigate("/shared-expense")}
+            className="hover:bg-indigo-900 w-full text-left p-2 rounded"
+          >
+            Shared Expense
+          </button>
+        </li>
+        <li>
+          <button
             onClick={() => handleLogout()}
             className="hover:bg-indigo-900 w-full text-left p-2 rounded"
           >

@@ -11,6 +11,7 @@ import Income from "./Components/Income.jsx";
 import AddIncome from "./Components/AddIncome.jsx";
 import EditIncome from "./Components/editIncome.jsx";
 import Expense from "./Components/Expense.jsx";
+import SharedExpense from "./Components/SharedExpense.jsx";
 import Groups from "./Components/Groups.jsx";
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
           <Route path="/income" element={<Income />} />
           <Route path="/expense" element={<Expense />} />
           <Route path="/groups" element={<Groups />} />
+          <Route path="/shared-expense" element={<SharedExpense />} />
           <Route path="/add-income" element={<AddIncome />} />
           <Route path="/edit-income/:id" element={<EditIncome />} />
           <Route path="/" element={<Home />} />
