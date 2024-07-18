@@ -1,0 +1,39 @@
+import "./App.css";
+import AddExpense from "./Components/AddExpense.jsx";
+import EditExpense from "./Components/EditExpense.jsx";
+import Home from "./Components/Home.jsx";
+import Login from "./Components/Login.jsx";
+import Profile from "./Components/Profile.jsx";
+import Signup from "./Components/Signup.jsx";
+import New from "./Components/New.jsx";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Income from "./Components/Income.jsx";
+import AddIncome from "./Components/AddIncome.jsx";
+import EditIncome from "./Components/editIncome.jsx";
+import Expense from "./Components/Expense.jsx";
+import Groups from "./Components/Groups.jsx";
+
+function App() {
+  return (
+    <>
+      <Router>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/add-expense" element={<AddExpense />} />
+          <Route path="/edit-expense/:id" element={<EditExpense />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/income" element={<Income />} />
+          <Route path="/expense" element={<Expense />} />
+          <Route path="/groups" element={<Groups />} />
+          <Route path="/add-income" element={<AddIncome />} />
+          <Route path="/edit-income/:id" element={<EditIncome />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/newa" element={<New />} />
+        </Routes>
+      </Router>
+    </>
+  );
+}
+
+export default App;
