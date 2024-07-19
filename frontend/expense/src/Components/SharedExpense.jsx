@@ -6,6 +6,7 @@ const SharedExpense = () => {
   const [groups, setGroups] = useState([]);
   const [sharedExpenses, setSharedExpenses] = useState([]);
   const [selectedGroup, setSelectedGroup] = useState("");
+  const [paidBy, setPaidBy] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
@@ -44,9 +45,10 @@ const SharedExpense = () => {
     try {
     //   console.log("Inside create");
     //   console.log(description, amount, date, selectedGroup);
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         "http://localhost:3000/api/v5/share/create-shared-expense",
         {
+          paidBy,
           description,
           amount,
           date,
@@ -71,7 +73,7 @@ const SharedExpense = () => {
 
   const handleRemoveExpense = async (expenseId) => {
     try {
-      const response = await axiosInstance.delete(
+       await axiosInstance.delete(
         `http://localhost:3000/api/v5/share/delete-shared-expense/${expenseId}`
       );
     //   console.log(response.data);

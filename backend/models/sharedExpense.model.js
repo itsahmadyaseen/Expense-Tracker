@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 
 const sharedExpenseSchema = new mongoose.Schema({
-  user: {
+  paidBy: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "User",
+    required: true,
   },
 
   description: {

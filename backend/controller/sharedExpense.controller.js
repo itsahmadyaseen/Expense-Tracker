@@ -1,34 +1,70 @@
 import SharedExpense from "../models/sharedExpense.model.js";
 import Group from "../models/group.model.js";
 import Expense from "../models/expense.model.js";
+import Income from "../models/income.model.js";
 
 export const createSharedExpense = async (req, res) => {
   try {
-    const { description, amount, date, groupId } = req.body;
+    const { paidBy, description, amount, date, groupId } = req.body;
 
-    if (!description || !amount || !groupId) {
-      console.log("Provide all information ", newSharedExpense);
-      return res.status(404).json({ message: "Provide all information" });
+    // console.log("user id", paidBy);
+
+    if (!paidBy || !description || !amount || !groupId) {
+      console.log(
+        "Provide all information ",
+        amount,
+        paidBy,
+        description,
+        groupId
+      );
+      return res
+        .status(404)
+        .json({ message: "Provide all information", data: null });
     }
 
     const newSharedExpense = new SharedExpense({
+      paidBy: paidBy,
       description: description,
       amount: amount,
       date: date || Date.now(),
       group: groupId,
     });
 
+    console.log("new shared expense", newSharedExpense);
+
+
     const group = await Group.findById(groupId);
     const userArray = group.members;
-    // console.log('Group members: ',userArray[0]);
+
     const totalMembers = userArray.length;
-    console.log("total members", totalMembers);
+    console.log("total here members", totalMembers);
     const newAmount = Math.round(amount / totalMembers);
+   
+    const paidUserAmount = amount-newAmount;
+    console.log('paidUserAmount', paidUserAmount); 
+
+    const incomeForPaidUser = new Income({
+      user: paidBy,
+      description: description,
+      amount: paidUserAmount,
+      date: date || Date.now(),
+    })
+
+    console.log('incomeForPaidUser', incomeForPaidUser);
+
+    await incomeForPaidUser.save();
+
+    console.log("Group members: ", userArray);
+    const newUsersToAddExpense = userArray.filter(
+      (user) => user._id.toString() !== paidBy
+    );
+
+    console.log("new user array without paid user", newUsersToAddExpense);
 
     await newSharedExpense.save();
 
     // Save individual expenses for each user
-    for (let user of userArray) {
+    for (let user of newUsersToAddExpense) {
       const userId = user;
 
       const newExpense = new Expense({
