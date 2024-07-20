@@ -69,7 +69,7 @@ export const createSharedExpense = async (req, res) => {
       const newExpense = new Expense({
         user: userId,
         description: description,
-        amount: newAmount,
+        amount: Math.round(newAmount),
         date: date || Date.now(),
       });
 
@@ -112,6 +112,7 @@ export const deleteSharedExpense = async (req, res) => {
     }
     console.log("sharedExpenseDetails: ", sharedExpenseDetails);
 
+
     const groupId = sharedExpenseDetails.group;
     const groupDetails = await Group.findById(groupId);
     if (!groupDetails) {
@@ -123,31 +124,54 @@ export const deleteSharedExpense = async (req, res) => {
       return res.status(404).json({ message: "No members found in the group" });
     }
 
+    const paidUserId = await sharedExpenseDetails.paidBy;
+    console.log("paid user id", paidUserId);
+    const paidUserQuery = {
+      user: paidUserId,
+      description: sharedExpenseDetails.description,
+      amount: Math.round(
+        sharedExpenseDetails.amount -
+          sharedExpenseDetails.amount / userArray.length
+      ),
+    };
+    const paiduserDetails = await Income.findOneAndDelete(paidUserQuery);
+
+    console.log("paid user deleted", paiduserDetails);
+    if (!paiduserDetails) {
+      console.log("Cant delete paid user");
+    }
+
     for (let user of userArray) {
       const userId = user;
-      const query = {
-        user: userId,
-        description: sharedExpenseDetails.description,
-        amount: sharedExpenseDetails.amount / userArray.length,
-      };
-      console.log("Delete Query: ", query);
+      if (userId != paidUserId) {
+        const query = {
+          user: userId,
+          description: sharedExpenseDetails.description,
+          amount: Math.round(sharedExpenseDetails.amount / userArray.length),
+        };
+        console.log("Delete Query: ", query);
 
-      try {
-        const deleteResponse = await Expense.findOneAndDelete(query);
-        if (!deleteResponse) {
-          console.log("No matching individual expense found for user:", userId);
-        } else {
-          console.log("Individual Expense Deleted: ", deleteResponse);
+        try {
+          const deleteResponse = await Expense.findOneAndDelete(query);
+          if (!deleteResponse) {
+            console.log(
+              "No matching individual expense found for user:",
+              userId
+            );
+          } else {
+            console.log("Individual Expense Deleted: ", deleteResponse);
+          }
+        } catch (error) {
+          console.log(
+            "Error deleting individual expense for user:",
+            userId,
+            error
+          );
+          return res.status(500).json({
+            message: "Error deleting individual expense",
+            data: error,
+          });
         }
-      } catch (error) {
-        console.log(
-          "Error deleting individual expense for user:",
-          userId,
-          error
-        );
-        return res
-          .status(500)
-          .json({ message: "Error deleting individual expense", data: error });
       }
     }
     console.log("Shared expense deleted");

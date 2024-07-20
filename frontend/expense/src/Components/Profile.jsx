@@ -21,7 +21,7 @@ const Profile = () => {
   }, []);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return null;e
   }
 
   return (

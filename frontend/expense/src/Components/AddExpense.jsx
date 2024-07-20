@@ -4,6 +4,9 @@ import axiosInstance from "../axiosInstance";
 
 const AddExpense = () => {
   const [newExpense, setNewExpense] = useState({ title: "", description: "", amount: "", date: "" });
+  
+  const [expenses, setExpenses] = useState([]);
+  const [sum, setSum] = useState(0);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -15,7 +18,9 @@ const AddExpense = () => {
       const response = await axiosInstance.post('/create-expense', newExpense, { withCredentials: true });
       console.log('Expense created:', response.data);
       setNewExpense({ title: "", description: "", amount: "", date: "" });
-      navigate('/');
+      
+      navigate('/expense');
+      window.location.reload();
     } catch (error) {
       console.error("Error creating expense", error);
     }

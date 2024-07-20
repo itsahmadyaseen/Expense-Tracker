@@ -1,7 +1,8 @@
 /* eslint-disable react/no-unescaped-entities */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
+// import axiosInstance from "../axiosInstance";
+import axios from "axios";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axiosInstance.post(
+      const response = await axios.post(
         "http://localhost:3000/api/v1/users/login",
         formData,
         { withCredentials: true }
@@ -34,7 +35,21 @@ const Login = () => {
       localStorage.setItem("id", id);
       localStorage.setItem("token", token);
       console.log("token: ", token);
+
+      //cookie approach
       
+      /*
+      const cookies = document.cookie.split(";").reduce((acc, cookie) => {
+        const [name, value] = cookie.split("=").map(c => c.trim());
+        acc[name] = value;
+        return acc;
+      }, {});
+  
+      if (cookies.token) {
+        localStorage.setItem("cookieToken", cookies.token);
+        console.log("Token stored in local storage from cookie: ", cookies.token);
+      }*/
+
       navigate("/");
     } catch (error) {
       console.log("Error Logging in", error);

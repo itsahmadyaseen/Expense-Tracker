@@ -6,8 +6,7 @@ export const verifyJWT = (req, res, next) => {
 
   // console.log('auth token:', authHeader);
   console.log('cookie token:', cookieToken);
-
-
+  
   if (!cookieToken) {
     console.log("No token provided");
     return res.status(403).json({ message: "No token provided" });

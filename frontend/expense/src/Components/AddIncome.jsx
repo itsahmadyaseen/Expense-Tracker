@@ -15,7 +15,9 @@ const AddIncome = () => {
       const response = await axiosInstance.post('http://localhost:3000/api/v3/incomes/create-Income', newIncome, { withCredentials: true });
       console.log('Income created:', response.data);
       setNewIncome({ title: "", description: "", amount: "", date: "" });
+
       navigate('/income');
+      window.location.reload();
     } catch (error) {
       console.error("Error creating Income", error);
     }

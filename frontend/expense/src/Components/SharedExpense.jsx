@@ -63,7 +63,7 @@ const SharedExpense = () => {
     if (selectedExpense) {
       const group = groups.find((group) => group._id === selectedExpense.group);
       if (group) {
-        setIndividualExpense(selectedExpense.amount / group.members.length);
+        setIndividualExpense(Math.round(selectedExpense.amount / group.members.length));
       }
     }
   }, [selectedExpense, groups]);
@@ -111,8 +111,8 @@ const SharedExpense = () => {
       console.log(expenseResponse.data.data);
       setSharedExpenses(expenseResponse.data.data);
     } catch (error) {
-      console.log("Error adding shared expense", error.message);
-      alert("Error adding shared expense");
+      console.log("Error deleting shared expense", error.message);
+      alert("Error deleting shared expense");
     }
   };
 
@@ -127,11 +127,11 @@ const SharedExpense = () => {
   };
 
   return (
-    <div className=" flex shared-expense-container">
+    <div className=" flex shared-expense-container ">
       <div>
         <Sidebar />
       </div>
-      <div className="w-full h-screen overflow-y-auto p-3">
+      <div className="w-full h-screen overflow-y-auto p-5 ">
         <h2 className="text-3xl font-bold mb-4">Add Shared Expenses</h2>
         <div className="mb-4">
           <label htmlFor="group-select" className="block mb-2">
