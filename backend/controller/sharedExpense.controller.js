@@ -32,25 +32,24 @@ export const createSharedExpense = async (req, res) => {
 
     console.log("new shared expense", newSharedExpense);
 
-
     const group = await Group.findById(groupId);
     const userArray = group.members;
 
     const totalMembers = userArray.length;
     console.log("total here members", totalMembers);
     const newAmount = Math.round(amount / totalMembers);
-   
-    const paidUserAmount = amount-newAmount;
-    console.log('paidUserAmount', paidUserAmount); 
+
+    const paidUserAmount = amount - newAmount;
+    console.log("paidUserAmount", paidUserAmount);
 
     const incomeForPaidUser = new Income({
       user: paidBy,
       description: description,
       amount: paidUserAmount,
       date: date || Date.now(),
-    })
+    });
 
-    console.log('incomeForPaidUser', incomeForPaidUser);
+    console.log("incomeForPaidUser", incomeForPaidUser);
 
     await incomeForPaidUser.save();
 
@@ -177,5 +176,31 @@ export const getSharedExpenses = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error fetching shared expenses", data: error });
+  }
+};
+
+export const getSharedExpenseById = async (req, res) => {
+  try {
+    const expenseId = req.params.id;
+
+    const sharedExpense = await SharedExpense.findById(expenseId);
+    console.log("sharedExpense ", sharedExpense);
+
+    if (!sharedExpense) {
+      console.log("Unable to get shared expense");
+      return res
+        .status(400)
+        .json({ message: "Unable to get shared expense", data: sharedExpense });
+    }
+
+    console.log("Fetched shared expense", sharedExpense);
+    return res
+      .status(400)
+      .json({ message: "Fetched shared expense", data: sharedExpense });
+  } catch (error) {
+    console.log("Error fetching shared expense", error);
+    return res
+      .status(400)
+      .json({ message: "Error fetching shared expense", data: error });
   }
 };

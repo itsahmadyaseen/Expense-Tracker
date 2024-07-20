@@ -6,8 +6,6 @@ import AddMember from "./AddMember.jsx";
 const Groups = () => {
   const [groups, setGroups] = useState([]);
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchGroups = async () => {
@@ -18,10 +16,8 @@ const Groups = () => {
         );
         // console.log('response', response.data);
         setGroups(response.data);
-        setLoading(false);
       } catch (err) {
-        setError(err.message);
-        setLoading(false);
+        console.log('Error fetching groups ', err);
       }
     };
 
@@ -68,9 +64,6 @@ const Groups = () => {
       console.log("Error removing member from group", error);
     }
   };
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="flex">

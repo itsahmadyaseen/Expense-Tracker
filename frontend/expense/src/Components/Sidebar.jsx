@@ -10,11 +10,17 @@ const Sidebar = () => {
         withCredentials: true,
       });
       console.log("User logged out");
+  
+      // Remove token and id from local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('id');
+  
       navigate("/login");
     } catch (error) {
-      console.error("Error fetching user profile", error);
+      console.error("Error logging out", error);
     }
   };
+  
 
   return (
     <div className="w-64 bg-indigo-950 text-white h-screen p-5">

@@ -49,6 +49,7 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign(authClaims, "Expense123", {
           expiresIn: "2d",
         });
+        console.log('token ',token);
 
         res.cookie("token", token, {
           maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -92,6 +93,8 @@ export const logoutUser = async (req, res) => {
     res.cookie("token", "", {
       maxAge: 0,
       httpOnly: true,
+      secure:true,
+      
     });
     console.log("User logged out");
     return res.status(200).json({ message: "User Logged out" });
