@@ -3,21 +3,23 @@ import cors from "cors";
 import { connectDB } from "./database/connection.js";
 import userRouter from "./routes/user.routes.js";
 import expenseRouter from "./routes/expense.routes.js";
-import incomeRouter from './routes/income.routes.js'
-import groupRouter from './routes/group.routes.js'
-import sharedExpenseRouter from './routes/sharedExpense.routes.js'
-import cookieParser from 'cookie-parser';
+import incomeRouter from "./routes/income.routes.js";
+import groupRouter from "./routes/group.routes.js";
+import sharedExpenseRouter from "./routes/sharedExpense.routes.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 connectDB();
 
-app.use(cors({
-  origin: 'http://localhost:5173', 
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 app.use(express.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 app.use("/api/v1/users", userRouter);
 app.use("/api/v2/expenses", expenseRouter);

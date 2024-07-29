@@ -14,6 +14,7 @@ const Home = () => {
         const response = await axiosInstance.get("/get-expenses", {
           withCredentials: true,
         });
+        
         const fetchedExpenses = response.data;
 
         const totalSum = fetchedExpenses.reduce(

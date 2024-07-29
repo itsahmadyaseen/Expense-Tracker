@@ -32,8 +32,8 @@ export const getExpenses = async (req, res) => {
         console.log(expenses);
         return res.status(200).json(expenses)
     } catch (error) {
-        console.log('Unable to get expenses');
-        return res.status(200).json({message:'Unable to get expenses'})
+        console.log('Unable to get expenses', error);
+        return res.status(500).json({message:'Unable to get expenses'})
     }
 }
 
@@ -45,10 +45,11 @@ export const deleteExpense = async (req, res) => {
             console.log('Deletion failed');
             return res.status(400).json('Deletion failed')
         }
+        console.log('Blog deleted');
         return res.status(200).json({message:"Expense Deleted"})
     } catch (error) {
         console.log('Unable to delete expense', error);
-        return res.status(200).json({message:'Unable to delete expense'})
+        return res.status(500).json({message:'Unable to delete expense'})
     }
 }
 
@@ -66,7 +67,7 @@ export const updateExpense = async (req, res) => {
     return res.status(200).json(response);
   } catch (error) {
     console.log('User updation failed ', error);
-    return res.status(400).json({error});
+    return res.status(500).json({error});
   }
 }
 

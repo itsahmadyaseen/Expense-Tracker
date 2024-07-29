@@ -21,7 +21,7 @@ export const createGroup = async (req, res) => {
 
 export const getGroups = async (req, res) => {
   try {
-    const groups = await Group.find().populate("members");
+    const groups = await Group.find().populate("members","-password");
 
     if (!groups.length) {
       console.log("no groups found", groups);

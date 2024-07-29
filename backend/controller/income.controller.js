@@ -31,7 +31,7 @@ export const getIncome = async (req, res) => {
       console.log("User id not provided", userId);
       return res.status(404).json(userId);
     }
-    const income = await Income.find({ user: userId });
+    const income = await Income.find({ user: userId }).sort({date:-1});
     if (!income) {
       console.log("Unable to get incomes");
       return res.status(401).json(income);

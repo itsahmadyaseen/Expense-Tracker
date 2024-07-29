@@ -186,7 +186,7 @@ export const deleteSharedExpense = async (req, res) => {
 
 export const getSharedExpenses = async (req, res) => {
   try {
-    const response = await SharedExpense.find();
+    const response = await SharedExpense.find().sort({date:-1});
     if (!response) {
       console.log("Cannot get shared expenses", response);
       return res.status(404).json("Cannot get shared expenses");
