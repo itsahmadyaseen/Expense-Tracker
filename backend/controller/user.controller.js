@@ -59,7 +59,7 @@ export const loginUser = async (req, res) => {
         });
 
         console.log("User Logged in");
-        return res.status(200).json({ id: existingUser._id, token: token });
+        return res.status(200).json({ id: existingUser._id, token: token, username:username});
       } else {
         console.log("Invalid password", err);
         return res.status(400).json({ message: "Invalid password" });
@@ -127,7 +127,7 @@ export const getUsers = async (req, res) => {
     const users = await User.find();
     if (!users) {
       console.log("Unable to fetch users", users);
-      return res.status(400).json({ message: "Unable to fetch users" });
+      return res.status(404).json({ message: "Unable to fetch users" });
     }
 
     console.log(" fetched users");
