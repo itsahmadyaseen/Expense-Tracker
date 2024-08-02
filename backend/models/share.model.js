@@ -8,13 +8,15 @@ const shareSchema = new mongoose.Schema(
     },
     paidUserId: {
       type: mongoose.Schema.Types.ObjectId,
-      required: true,
       ref: "User",
     },
     amount: {
       type: Number,
       required: true,
     },
+    paymentObject: {
+      type: mongoose.Schema.Types.Mixed,
+    }, 
     expenseObject: {
       type: mongoose.Schema.Types.Mixed,
       required: true,

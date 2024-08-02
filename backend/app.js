@@ -7,6 +7,7 @@ import incomeRouter from "./routes/income.routes.js";
 import groupRouter from "./routes/group.routes.js";
 import sharedExpenseRouter from "./routes/sharedExpense.routes.js";
 import shareRouter from "./routes/share.routes.js";
+import payShareRouter from "./routes/payshare.routes.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/v3/incomes", incomeRouter);
 app.use("/api/v4/groups", groupRouter);
 app.use("/api/v5/share", sharedExpenseRouter);
 app.use("/api/v6/new-shares", shareRouter);
+app.use("/api/v7/pay-shares", payShareRouter);
 
 app.listen(3000, () => {
   console.log("Running on port ", 3000);
