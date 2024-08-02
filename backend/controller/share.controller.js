@@ -107,7 +107,9 @@ export const getShares = async (req, res) => {
       for (let userId in share.expenseObject) {
         const user = await User.findById(userId).select("username").lean();
         if (user) {
-          populatedExpenseObject[user.username] = share.expenseObject[userId]; //Assigns the username from the User              document as a key in populatedExpenseObject.
+          populatedExpenseObject[user.username] = share.expenseObject[userId]; 
+          //Assigns the username from the User              
+          // document as a key in populatedExpenseObject.
           // The value is the amount that was originally stored under the userId key in expenseObject.
         }
       }
