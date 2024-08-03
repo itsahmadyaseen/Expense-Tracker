@@ -3,7 +3,7 @@ import axiosInstance from "../../axiosInstance";
 import Sidebar from "../Sidebar";
 import AddSharedExpense from "./AddSharedExpense";
 import SharedExpenseDetailsCards from "./SharedExpenseDetailsCards";
-import SettleShare from "./SettleShare";
+// import SettleShare from "./SettleShare";
 
 const NewSharedExpense = () => {
   const [groups, setGroups] = useState([]);

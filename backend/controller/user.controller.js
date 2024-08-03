@@ -57,6 +57,8 @@ export const loginUser = async (req, res) => {
           sameSite: "none",
           secure: true,
         });
+        console.log('res cookie', res.cookie);
+        
 
         console.log("User Logged in");
         return res.status(200).json({ id: existingUser._id, token: token, username:username});
@@ -130,7 +132,7 @@ export const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Unable to fetch users" });
     }
 
-    console.log(" fetched users");
+    console.log(" fetched users", users);
     return res.status(200).json(users);
   } catch (error) {
     console.log("Unable to fetch profile", error);

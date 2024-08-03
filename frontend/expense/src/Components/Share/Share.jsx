@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../axiosInstance";
 import Sidebar from "../Sidebar";
-import SettleShare from "../Shared Expense/SettleShare";
-import AddShare from "../Share/AddShare"; // Import AddShare component
+import SettleShare from "./SettleShare";
+import AddShare from "./AddShare";
 
 const Share = () => {
   const [shares, setShares] = useState([]);
@@ -14,7 +14,7 @@ const Share = () => {
     const fetchShares = async () => {
       try {
         const response = await axiosInstance.get(
-          `http://localhost:3000/api/v6/new-shares/get-shares`
+          `http://localhost:3000/api/v7/pay-shares/get-pay-shares`
         );
         setShares(response.data.data);
       } catch (error) {
@@ -52,10 +52,22 @@ const Share = () => {
               >
                 <div>
                   <p className="text-xl">Description: {share.description}</p>
-                  <p className="text-xl">
-                    User paid: {share.paidUserId.username}
-                  </p>
+
                   <p className="text-xl">Amount: ₹{share.amount}</p>
+                  {share.paymentObject && (
+                    <div className="mt-4">
+                      <h3 className="text-lg font-bold">Payment Details:</h3>
+                      <ul>
+                        {Object.entries(share.paymentObject).map(
+                          ([userId, amount]) => (
+                            <li key={userId} className="text-md">
+                              {userId} - ₹{amount}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  )}
                   {share.expenseObject && (
                     <div className="mt-4">
                       <h3 className="text-lg font-bold">Expense Details:</h3>

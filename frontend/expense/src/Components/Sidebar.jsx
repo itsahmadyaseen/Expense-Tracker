@@ -76,6 +76,14 @@ const Sidebar = () => {
         </li>
         <li>
           <button
+            onClick={() => navigate('/share')}
+            className="hover:bg-indigo-900 w-full text-left p-2 rounded"
+          >
+            Shares
+          </button>
+        </li>
+        <li>
+          <button
             onClick={() => handleLogout()}
             className="hover:bg-indigo-900 w-full text-left p-2 rounded"
           >

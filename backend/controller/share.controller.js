@@ -108,8 +108,7 @@ export const getShares = async (req, res) => {
         const user = await User.findById(userId).select("username").lean();
         if (user) {
           populatedExpenseObject[user.username] = share.expenseObject[userId]; 
-          //Assigns the username from the User              
-          // document as a key in populatedExpenseObject.
+          //Assigns the username from the User document as a key in populatedExpenseObject.      
           // The value is the amount that was originally stored under the userId key in expenseObject.
         }
       }
@@ -221,14 +220,14 @@ export const settleShare = async (req, res) => {
       //   creditorId: credUserId,
       // });
 
-      const debObjectId = new mongoose.Types.ObjectId(debUserId);
-      const credObjectId = new mongoose.Types.ObjectId(myId);
+      // const debObjectId = new mongoose.Types.ObjectId(debUserId);
+      // const credObjectId = new mongoose.Types.ObjectId(myId);
 
       const shareDetails = await shareIndividual.aggregate([
         {
           $match: {
-            debtorId: debObjectId,
-            creditorId: credObjectId,
+            debtorId: debUserId,
+            creditorId: myId,
           },
         },
         {

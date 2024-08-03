@@ -29,7 +29,7 @@ function App() {
           <Route path="/income" element={<Income />} />
           <Route path="/expense" element={<Expense />} />
           <Route path="/groups" element={<Groups />} />
-          {/* <Route path="/shared-expense" element={<SharedExpense />} /> */}
+          <Route path="/shared-expense" element={<NewSharedExpense />} />
           <Route path="/new-shared-expense" element={<NewSharedExpense />} />
           <Route path="/share" element={<Share />} />
           <Route path="/add-income" element={<AddIncome />} />

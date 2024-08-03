@@ -3,8 +3,8 @@ import axiosInstance from "../../axiosInstance";
 
 const AddShare = ({ onClose }) => {
   const [description, setDescription] = useState("");
-  const [paidUserId, setPaidUserId] = useState("");
   const [amount, setAmount] = useState("");
+  const [payments, setPayments] = useState([]);
   const [expenses, setExpenses] = useState([]);
   const [users, setUsers] = useState([]); // List of users to select from
 
@@ -24,6 +24,15 @@ const AddShare = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const paymentObject = payments.reduce((acc, { username, amount }) => {
+      const user = users.find((user) => user.username === username);
+      if (user) acc[user._id] = amount; // Use user ID from the list
+      return acc;
+    }, {});
+    console.log('payment ',paymentObject);
+    
+
     const expenseObject = expenses.reduce((acc, { username, amount }) => {
       const user = users.find((user) => user.username === username);
       if (user) acc[user._id] = amount; // Use user ID from the list
@@ -32,14 +41,14 @@ const AddShare = ({ onClose }) => {
 
     const newShare = {
       description,
-      paidUserId,
       amount,
+      paymentObject,
       expenseObject,
     };
 
     try {
       const response = await axiosInstance.post(
-        "http://localhost:3000/api/v6/new-shares/create-share",
+        "http://localhost:3000/api/v7/pay-shares/create-pay-share",
         newShare
       );
       console.log("Share created successfully:", response.data);
@@ -48,6 +57,21 @@ const AddShare = ({ onClose }) => {
     } catch (error) {
       console.log("Error creating share:", error);
     }
+  };
+
+  const handlePaymentChange = (index, key, value) => {
+    const newPayments = [...payments];
+    newPayments[index] = { ...newPayments[index], [key]: value };
+    setPayments(newPayments);
+  };
+
+  const addpayment = () => {
+    setPayments([...payments, { username: "", amount: "" }]);
+  };
+
+  const removePayment = (index) => {
+    const newPayments = payments.filter((_, i) => i !== index);
+    setPayments(newPayments);
   };
 
   const handleExpenseChange = (index, key, value) => {
@@ -80,22 +104,7 @@ const AddShare = ({ onClose }) => {
               required
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Paid User</label>
-            <select
-              className="w-full p-2 border rounded"
-              value={paidUserId}
-              onChange={(e) => setPaidUserId(e.target.value)}
-              required
-            >
-              <option value="">Select User</option>
-              {users.map((user) => (
-                <option key={user._id} value={user._id}>
-                  {user.username}
-                </option>
-              ))}
-            </select>
-          </div>
+
           <div className="mb-4">
             <label className="block text-gray-700">Amount</label>
             <input
@@ -107,13 +116,59 @@ const AddShare = ({ onClose }) => {
             />
           </div>
           <div className="mb-4">
+            <label className="block text-gray-700">Payment Details</label>
+            {payments.map((payment, index) => (
+              <div key={index} className="flex space-x-2 mb-2">
+                <select
+                  className="w-1/2 p-2 border rounded"
+                  value={payment.username}
+                  onChange={(e) =>
+                    handlePaymentChange(index, "username", e.target.value)
+                  }
+                >
+                  <option value="">Select User</option>
+                  {users.map((user) => (
+                    <option key={user._id} value={user.username}>
+                      {user.username}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="number"
+                  className="w-1/2 p-2 border rounded"
+                  placeholder="Amount"
+                  value={payment.amount}
+                  onChange={(e) =>
+                    handlePaymentChange(index, "amount", e.target.value)
+                  }
+                />
+                <button
+                  type="button"
+                  className="text-red-500"
+                  onClick={() => removePayment(index)}
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={addpayment}
+            >
+              Add Payment
+            </button>
+          </div>
+          <div className="mb-4">
             <label className="block text-gray-700">Expense Details</label>
             {expenses.map((expense, index) => (
               <div key={index} className="flex space-x-2 mb-2">
                 <select
                   className="w-1/2 p-2 border rounded"
                   value={expense.username}
-                  onChange={(e) => handleExpenseChange(index, "username", e.target.value)}
+                  onChange={(e) =>
+                    handleExpenseChange(index, "username", e.target.value)
+                  }
                 >
                   <option value="">Select User</option>
                   {users.map((user) => (
@@ -127,7 +182,9 @@ const AddShare = ({ onClose }) => {
                   className="w-1/2 p-2 border rounded"
                   placeholder="Amount"
                   value={expense.amount}
-                  onChange={(e) => handleExpenseChange(index, "amount", e.target.value)}
+                  onChange={(e) =>
+                    handleExpenseChange(index, "amount", e.target.value)
+                  }
                 />
                 <button
                   type="button"
