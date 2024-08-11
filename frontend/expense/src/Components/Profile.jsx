@@ -21,7 +21,7 @@ const Profile = () => {
   }, []);
 
   if (!user) {
-    return null;e
+    return null;
   }
 
   return (

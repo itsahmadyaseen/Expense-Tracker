@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import Sidebar from "./Sidebar";
+import Chart from "./Chart";
 
 const Home = () => {
   const [expenseSum, setExpenseSum] = useState(0);
@@ -14,7 +15,7 @@ const Home = () => {
         const response = await axiosInstance.get("/get-expenses", {
           withCredentials: true,
         });
-        
+
         const fetchedExpenses = response.data;
 
         const totalSum = fetchedExpenses.reduce(
@@ -68,6 +69,9 @@ const Home = () => {
         <div>
           <h1 className="text-3xl font-bold mb-8">Total Incomes</h1>
           <h2 className="text-2xl pb-6">₹{incomeSum}</h2>
+        </div>
+        <div>
+          <Chart />
         </div>
       </div>
     </div>

@@ -134,7 +134,6 @@ export const getPayShare = async (req, res) => {
           populatedPayShare[user.username] = share.paymentObject[userId];
         }
       }
-      console.log(share.expenseObject);
       
 
       for (const userId in share.expenseObject) {
