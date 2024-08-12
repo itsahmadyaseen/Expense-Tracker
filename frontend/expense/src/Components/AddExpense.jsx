@@ -1,30 +1,18 @@
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
+import { useGlobalContext } from "../Context/GlobalContext";
 
 const AddExpense = () => {
   const [newExpense, setNewExpense] = useState({ title: "", description: "", amount: "", date: "" });
   
-  const [expenses, setExpenses] = useState([]);
-  const [sum, setSum] = useState(0);
-  const navigate = useNavigate();
+  const {addExpense} = useGlobalContext();
 
   const handleChange = (e) => {
     setNewExpense({ ...newExpense, [e.target.name]: e.target.value });
   };
 
-  const handleCreate = async () => {
-    try {
-      const response = await axiosInstance.post('/create-expense', newExpense, { withCredentials: true });
-      console.log('Expense created:', response.data);
-      setNewExpense({ title: "", description: "", amount: "", date: "" });
-      
-      navigate('/expense');
-      window.location.reload();
-    } catch (error) {
-      console.error("Error creating expense", error);
-    }
-  };
+  
 
   return (
     <div className="flex max-h-96 mb-10">
@@ -55,7 +43,7 @@ const AddExpense = () => {
           className="block w-full mb-4 p-2 border rounded"
         />
         <button
-          onClick={handleCreate}
+          onClick={()=> {addExpense(newExpense)}}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           Add Expense

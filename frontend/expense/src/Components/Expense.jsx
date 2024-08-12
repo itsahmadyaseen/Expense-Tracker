@@ -3,37 +3,19 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import Sidebar from "./Sidebar";
 import AddExpense from "./AddExpense";
+import { useGlobalContext } from "../Context/GlobalContext.jsx";
 
 const Expense = () => {
-  const [expenses, setExpenses] = useState([]);
+  // const [expenses, setExpenses] = useState([]);
   const [sum, setSum] = useState(0);
   const navigate = useNavigate();
 
+  const { fetchExpenses, expenses,  } = useGlobalContext();
+
   useEffect(() => {
-    const fetchExpenses = async () => {
-      try {
-        const response = await axiosInstance.get("/get-expenses", {
-          withCredentials: true,
-        });
-        const fetchedExpenses = response.data;
-
-        setExpenses(fetchedExpenses);
-
-        const totalSum = fetchedExpenses.reduce(
-          (acc, expense) => acc + expense.amount,
-          0
-        );
-        setSum(totalSum);
-      } catch (error) {
-        console.error("Error fetching expenses", error);
-        if (error.response && error.response.status === 401) {
-          navigate("/login");
-        }
-      }
-    };
-
+    
     fetchExpenses();
-  }, [navigate]);
+  }, [fetchExpenses]);
 
   const handleDelete = async (id) => {
     try {
@@ -41,7 +23,7 @@ const Expense = () => {
         withCredentials: true,
       });
       const updatedExpenses = expenses.filter((exp) => exp._id !== id);
-      setExpenses(updatedExpenses);
+      // setExpenses(updatedExpenses);
       const totalSum = updatedExpenses.reduce(
         (acc, expense) => acc + expense.amount,
         0
@@ -52,17 +34,13 @@ const Expense = () => {
     }
   };
 
-
   return (
     <div className="flex">
-      <Sidebar/>
+      <Sidebar />
       <div className="flex-1 p-10 overflow-y-auto h-screen">
+        
         <div>
-          <h1 className="text-3xl font-bold mb-8">Total Expenses</h1>
-          <h2 className="text-2xl pb-6">₹{sum}</h2>
-        </div>
-        <div>
-            <AddExpense/>
+          <AddExpense />
         </div>
         <div>
           <h1 className="text-3xl font-bold mb-8">My Expenses</h1>

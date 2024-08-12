@@ -3,66 +3,29 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import Sidebar from "./Sidebar";
 import AddIncome from "./AddIncome";
+import { useGlobalContext } from "../Context/GlobalContext";
 
 const Income = () => {
-  const [incomes, setIncomes] = useState([]);
   const [sum, setSum] = useState(0);
   const navigate = useNavigate();
+  const {incomes, fetchIncomes, deleteIncome } = useGlobalContext();
 
   useEffect(() => {
-    const fetchIncomes = async () => {
-      try {
-        const response = await axiosInstance.get("http://localhost:3000/api/v3/incomes/get-incomes", {
-          withCredentials: true,
-        });
-        const fetchedIncomes = response.data;
-
-        setIncomes(fetchedIncomes);
-
-        const totalSum = fetchedIncomes.reduce(
-          (acc, income) => acc + income.amount,
-          0
-        );
-        setSum(totalSum);
-      } catch (error) {
-        console.error("Error fetching incomes", error);
-        if (error.response && error.response.status === 401) {
-          navigate("/login");
-        }
-      }
-    };
-
     fetchIncomes();
-  }, [navigate]);
+  }, [fetchIncomes]);
 
-  const handleDelete = async (id) => {
-    try {
-      await axiosInstance.delete(`http://localhost:3000/api/v3/incomes/delete-income/${id}`, {
-        withCredentials: true,
-      });
-      const updatedIncomes = incomes.filter((exp) => exp._id !== id);
-      setIncomes(updatedIncomes);
-      const totalSum = updatedIncomes.reduce(
-        (acc, income) => acc + income.amount,
-        0
-      );
-      setSum(totalSum);
-    } catch (error) {
-      console.error("Error deleting income", error);
-    }
-  };
-
+  
 
   return (
     <div className="flex">
-      <Sidebar/>
+      <Sidebar />
       <div className="flex-1 p-10 overflow-y-auto h-screen">
         <div>
           <h1 className="text-3xl font-bold mb-8">Total Income</h1>
           <h2 className="text-2xl pb-6">₹{sum}</h2>
         </div>
         <div>
-          <AddIncome/>
+          <AddIncome />
         </div>
         <div>
           <h1 className="text-3xl font-bold mb-8">My Incomes</h1>
@@ -91,7 +54,7 @@ const Income = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(income._id)}
+                    onClick={() => deleteIncome(income._id)}
                     className="bg-red-500 text-white px-4 py-2 rounded"
                   >
                     Delete

@@ -1,4 +1,3 @@
-import "./App.css";
 import AddExpense from "./Components/AddExpense.jsx";
 import EditExpense from "./Components/EditExpense.jsx";
 import Home from "./Components/Home.jsx";
@@ -19,7 +18,6 @@ import Share from "./Components/Share/Share.jsx";
 function App() {
   return (
     <>
-      <Router>
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
@@ -37,7 +35,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/newa" element={<New />} />
         </Routes>
-      </Router>
     </>
   );
 }

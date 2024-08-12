@@ -1,27 +1,22 @@
 import  { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
+import { useGlobalContext } from "../Context/GlobalContext";
 
 const AddIncome = () => {
   const [newIncome, setNewIncome] = useState({ title: "", description: "", amount: "", date: "" });
-  const navigate = useNavigate();
 
+  const {addIncome} = useGlobalContext();
   const handleChange = (e) => {
     setNewIncome({ ...newIncome, [e.target.name]: e.target.value });
   };
 
-  const handleCreate = async () => {
-    try {
-      const response = await axiosInstance.post('http://localhost:3000/api/v3/incomes/create-Income', newIncome, { withCredentials: true });
-      console.log('Income created:', response.data);
-      setNewIncome({ title: "", description: "", amount: "", date: "" });
-
-      navigate('/income');
-      window.location.reload();
-    } catch (error) {
-      console.error("Error creating Income", error);
-    }
-  };
+  const handleSubmit = async (e)=>{
+    e.preventDefault()
+    await addIncome(newIncome);
+    setNewIncome({ title: "", description: "", amount: "", date: "" });
+  }
+  
 
   return (
     <div className="flex max-h-96 mb-10">
@@ -52,7 +47,7 @@ const AddIncome = () => {
           className="block w-full mb-4 p-2 border rounded"
         />
         <button
-          onClick={handleCreate}
+          onClick={()=>{handleSubmit}}
           className="bg-blue-500 text-white px-4 py-2 rounded"
         >
           Add Income
