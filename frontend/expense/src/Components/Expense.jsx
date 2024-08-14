@@ -10,7 +10,7 @@ const Expense = () => {
   const [sum, setSum] = useState(0);
   const navigate = useNavigate();
 
-  const { fetchExpenses, expenses,  } = useGlobalContext();
+  const { fetchExpenses, expenses  } = useGlobalContext();
 
   useEffect(() => {
     
