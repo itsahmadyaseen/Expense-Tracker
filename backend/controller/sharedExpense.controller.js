@@ -3,96 +3,183 @@ import Group from "../models/group.model.js";
 import Expense from "../models/expense.model.js";
 import Income from "../models/income.model.js";
 
+// export const createSharedExpense = async (req, res) => {
+//   try {
+//     const { paidBy, description, amount, date, groupId } = req.body;
+
+//     // console.log("user id", paidBy);
+
+//     const newSharedExpense = new SharedExpense({
+//       paidBy: paidBy,
+//       description: description,
+//       amount: amount,
+//       date: date || Date.now(),
+//       group: groupId,
+//     });
+
+//     console.log("new shared expense", newSharedExpense);
+
+//     const groupDetails = await Group.findById(groupId);
+//     if (!groupDetails) {
+//       console.log('Error Error groupDetails', groupDetails);
+      
+//       return res.status(404).json({ message: "Group not found" });
+//     }
+//     console.log('groupDetails= : ',groupDetails);
+    
+//     const userArray = groupDetails.members;
+
+//     const totalMembers = userArray.length;
+//     console.log("total here members", totalMembers);
+//     const newAmount = Math.round(amount / totalMembers);
+
+//     const paidUserAmount = amount - newAmount;
+//     console.log("paidUserAmount", paidUserAmount);
+
+//     const incomeForPaidUser = new Income({
+//       user: paidBy,
+//       description: description,
+//       amount: paidUserAmount,
+//       date: date || Date.now(),
+//     });
+
+//     console.log("incomeForPaidUser", incomeForPaidUser);
+
+//     await incomeForPaidUser.save();
+
+//     console.log("Group members: ", userArray);
+//     const newUsersToAddExpense = userArray.filter(
+//       (user) => user._id.toString() !== paidBy
+//     );
+
+//     console.log("new user array without paid user", newUsersToAddExpense);
+
+//     await newSharedExpense.save();
+
+//     // Save individual expenses for each user
+//     for (let user of newUsersToAddExpense) {
+//       const userId = user;
+
+//       const newExpense = new Expense({
+//         user: userId,
+//         description: description,
+//         amount: Math.round(newAmount),
+//         date: date || Date.now(),
+//       });
+
+//       try {
+//         await newExpense.save();
+//         console.log("New Expense created for user:", userId, newExpense);
+//       } catch (err) {
+//         console.log("Error creating individual expense for user:", userId, err);
+//         return res
+//           .status(500)
+//           .json({ message: "Error creating individual expense", data: err });
+//       }
+//     }
+
+//     console.log("New Shared Expense created : ", newSharedExpense);
+//     return res
+//       .status(201)
+//       .json({ message: "New Shared Expense created ", data: newSharedExpense });
+//   } catch (error) {
+//     console.log("Error creating shared expense ", error);
+//     return res
+//       .status(500)
+//       .json({ message: "Error creating shared expense", data: error });
+//   }
+// };
+
 export const createSharedExpense = async (req, res) => {
   try {
     const { paidBy, description, amount, date, groupId } = req.body;
 
-    // console.log("user id", paidBy);
+    // Log user info
+    console.log("User ID (paidBy):", paidBy);
 
-    if (!paidBy || !description || !amount || !groupId) {
-      console.log(
-        "Provide all information ",
-        amount,
-        paidBy,
-        description,
-        groupId
-      );
-      return res
-        .status(404)
-        .json({ message: "Provide all information", data: null });
-    }
-
+    // Create new shared expense instance
     const newSharedExpense = new SharedExpense({
-      paidBy: paidBy,
-      description: description,
-      amount: amount,
+      paidBy,
+      description,
+      amount,
       date: date || Date.now(),
       group: groupId,
     });
 
-    console.log("new shared expense", newSharedExpense);
+    console.log("New shared expense:", newSharedExpense);
 
-    const group = await Group.findById(groupId);
-    const userArray = group.members;
+    // Fetch group details
+    const groupDetails = await Group.findById(groupId);
+    if (!groupDetails) {
+      console.log("Group not found");
+      return res.status(404).json({ message: "Group not found" });
+    }
+
+    console.log('Group details:', groupDetails);
+
+    const userArray = groupDetails.members;
 
     const totalMembers = userArray.length;
-    console.log("total here members", totalMembers);
+    console.log("Total members in group:", totalMembers);
+
     const newAmount = Math.round(amount / totalMembers);
-
     const paidUserAmount = amount - newAmount;
-    console.log("paidUserAmount", paidUserAmount);
+    console.log("Paid user amount:", paidUserAmount);
 
+    // Create and save income for the paid user
     const incomeForPaidUser = new Income({
       user: paidBy,
-      description: description,
+      description,
       amount: paidUserAmount,
       date: date || Date.now(),
     });
 
-    console.log("incomeForPaidUser", incomeForPaidUser);
+    console.log("Income for paid user:", incomeForPaidUser);
 
+    // Save income to the database
     await incomeForPaidUser.save();
 
-    console.log("Group members: ", userArray);
+    // Filter out the paid user from the group members
     const newUsersToAddExpense = userArray.filter(
       (user) => user._id.toString() !== paidBy
     );
 
-    console.log("new user array without paid user", newUsersToAddExpense);
+    console.log("Users to add expense (excluding paid user):", newUsersToAddExpense);
 
+    // Save shared expense
     await newSharedExpense.save();
 
     // Save individual expenses for each user
     for (let user of newUsersToAddExpense) {
-      const userId = user;
-
       const newExpense = new Expense({
-        user: userId,
-        description: description,
+        user: user._id,
+        description,
         amount: Math.round(newAmount),
         date: date || Date.now(),
       });
 
       try {
+        // Save individual user expense
         await newExpense.save();
-        console.log("New Expense created for user:", userId, newExpense);
+        console.log("New Expense created for user:", user._id, newExpense);
       } catch (err) {
-        console.log("Error creating individual expense for user:", userId, err);
-        return res
-          .status(500)
-          .json({ message: "Error creating individual expense", data: err });
+        console.log("Error creating individual expense for user:", user._id, err);
+        return res.status(500).json({
+          message: "Error creating individual expense",
+          data: err,
+        });
       }
     }
 
-    console.log("New Shared Expense created : ", newSharedExpense);
-    return res
-      .status(201)
-      .json({ message: "New Shared Expense created ", data: newSharedExpense });
+    console.log("New Shared Expense created:", newSharedExpense);
+    return res.status(201).json({
+      message: "New Shared Expense created",
+      data: newSharedExpense,
+    });
+
   } catch (error) {
-    console.log("Error creating shared expense ", error);
-    return res
-      .status(500)
-      .json({ message: "Error creating shared expense", data: error });
+    console.log("Error creating shared expense:", error);
+    return res.status(500).json({ message: "Error creating shared expense", data: error });
   }
 };
 
@@ -111,7 +198,6 @@ export const deleteSharedExpense = async (req, res) => {
       return res.status(404).json({ message: "Shared expense not found" });
     }
     console.log("sharedExpenseDetails: ", sharedExpenseDetails);
-
 
     const groupId = sharedExpenseDetails.group;
     const groupDetails = await Group.findById(groupId);
@@ -186,7 +272,7 @@ export const deleteSharedExpense = async (req, res) => {
 
 export const getSharedExpenses = async (req, res) => {
   try {
-    const response = await SharedExpense.find().sort({date:-1});
+    const response = await SharedExpense.find().sort({ date: -1 });
     if (!response) {
       console.log("Cannot get shared expenses", response);
       return res.status(404).json("Cannot get shared expenses");

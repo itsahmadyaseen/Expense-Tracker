@@ -38,7 +38,7 @@ function Chart() {
           withCredentials: true,
         });
 
-        const fetchedExpenses = response.data;
+        const fetchedExpenses = response.data.data;
         setExpenses(fetchedExpenses);
       } catch (error) {
         console.error("Error fetching expenses", error);

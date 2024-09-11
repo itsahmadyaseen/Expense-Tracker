@@ -9,6 +9,7 @@ const Expense = () => {
   // const [expenses, setExpenses] = useState([]);
   const [sum, setSum] = useState(0);
   const navigate = useNavigate();
+  const {deleteExpense} = useGlobalContext();
 
   const { fetchExpenses, expenses  } = useGlobalContext();
 
@@ -18,20 +19,7 @@ const Expense = () => {
   }, [fetchExpenses]);
 
   const handleDelete = async (id) => {
-    try {
-      await axiosInstance.delete(`delete-expense/${id}`, {
-        withCredentials: true,
-      });
-      const updatedExpenses = expenses.filter((exp) => exp._id !== id);
-      // setExpenses(updatedExpenses);
-      const totalSum = updatedExpenses.reduce(
-        (acc, expense) => acc + expense.amount,
-        0
-      );
-      setSum(totalSum);
-    } catch (error) {
-      console.error("Error deleting expense", error);
-    }
+    deleteExpense(id);
   };
 
   return (

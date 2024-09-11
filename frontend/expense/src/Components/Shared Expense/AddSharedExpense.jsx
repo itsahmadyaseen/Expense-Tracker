@@ -1,43 +1,35 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../axiosInstance";
- 
+import { useGlobalContext } from "../../Context/GlobalContext";
+
 const AddSharedExpense = ({ groups, users }) => {
   const [selectedGroup, setSelectedGroup] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
   const [date, setDate] = useState("");
-  // const [sharedExpenses, setSharedExpenses] = useState("");
+  const { createSharedExpense } = useGlobalContext();
   const navigate = useNavigate();
 
   const handleAddExpense = async () => {
-    try {
-       await axiosInstance.post(
-        "http://localhost:3000/api/v5/share/create-shared-expense",
-        {
-          paidBy: selectedUser,
-          description,
-          amount,
-          date,
-          groupId: selectedGroup,
-        }
-      );
+    createSharedExpense();
 
-      // const newExpense = response.data.data;
+    const data = {
+      paidBy: selectedUser,
+      description,
+      amount,
+      date,
+      groupId: selectedGroup,
+    };
 
-      // setSharedExpenses((prevExpenses) => [...prevExpenses, newExpense]);
+    createSharedExpense(data);
 
-      setSelectedUser("");
-      setDescription("");
-      setAmount("");
-      setDate("");
-      navigate("/shared-expense");
-    } catch (error) {
-      console.log("Error adding shared expense", error);
-      alert("Error adding shared expense");
-    }
+    setSelectedUser("");
+    setDescription("");
+    setAmount("");
+    setDate("");
+    navigate("/shared-expense");
   };
 
   return (

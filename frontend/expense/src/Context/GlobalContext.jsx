@@ -1,4 +1,4 @@
-import React, { createContext, useCallback, useContext, useState } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import axiosInstance from "../axiosInstance";
 import { useNavigate } from "react-router-dom";
 
@@ -7,15 +7,23 @@ const GlobalContext = createContext();
 export const GlobalProvider = ({ children }) => {
   const [expenses, setExpenses] = useState([]);
   const [incomes, setIncomes] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [sharedExpenses, setSharedExpenses] = useState([]);
   const navigate = useNavigate();
 
   const fetchExpenses = useCallback(async () => {
     try {
-      const response = await axiosInstance.get("/get-expenses", {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.get(
+        "http://localhost:3000/api/v2/expenses/get-expenses",
+        {
+          withCredentials: true,
+        }
+      );
 
-      setExpenses(response.data);
+      console.log("response - ", response.data.data);
+
+      setExpenses(response.data.data);
     } catch (error) {
       console.error("Error fetching expenses", error);
       if (error.response && error.response.status === 401) {
@@ -36,6 +44,19 @@ export const GlobalProvider = ({ children }) => {
       await fetchExpenses();
     } catch (error) {
       console.error("Error creating expense", error);
+    }
+  };
+
+  const deleteExpense = async () => {
+    try {
+      await axiosInstance.delete(`delete-expense/${id}`, {
+        withCredentials: true,
+      });
+      const updatedExpenses = expenses.filter((exp) => exp._id !== id);
+      setExpenses(updatedExpenses);
+      await fetchExpenses();
+    } catch (error) {
+      console.error("Error deleting expense", error);
     }
   };
 
@@ -83,16 +104,86 @@ export const GlobalProvider = ({ children }) => {
 
   const addIncome = async (newIncome) => {
     try {
-      const response = await axiosInstance.post(
+      await axiosInstance.post(
         "http://localhost:3000/api/v3/incomes/create-Income",
         newIncome,
         { withCredentials: true }
       );
+      console.log("added ");
 
-    //   navigate("/income");
-    await fetchIncomes()
+      //   navigate("/income");
+      await fetchIncomes();
     } catch (error) {
       console.error("Error creating Income", error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:3000/api/v1/users/get-users"
+      );
+      // console.log(response.data);
+      setUsers(response.data);
+    } catch (error) {
+      console.log("Error fetching users", error.message);
+    }
+  };
+
+  const fetchGroups = async () => {
+    try {
+      // console.log('inside get groups');
+      const response = await axiosInstance.get(
+        "http://localhost:3000/api/v4/groups/get-groups"
+      );
+      // console.log('response', response.data);
+      setGroups(response.data);
+    } catch (err) {
+      console.log("Error fetching groups ", err);
+    }
+  };
+
+  const removeMember = async (groupId, userId) => {
+    try {
+      await axiosInstance.delete(
+        `http://localhost:3000/api/v4/groups/remove-member/${groupId}`,
+        { data: { userId } }
+      );
+      const response = await axiosInstance.get(
+        "http://localhost:3000/api/v4/groups/get-groups"
+      ); // refresh
+      setGroups(response.data);
+    } catch (error) {
+      console.log("Error removing member from group", error);
+    }
+  };
+
+  const fetchSharedExpense = async () => {
+    try {
+      const response = await axiosInstance.get(
+        "http://localhost:3000/api/v5/share/get-shared-expense"
+      );
+      // console.log("sharedExpenses", response.data.data);
+      setSharedExpenses(response.data.data);
+    } catch (error) {
+      console.log("Error fetching shared expense", error);
+    }
+  };
+
+  const createSharedExpense = async (data) => {
+    try {
+      const response = await axiosInstance.post(
+        "http://localhost:3000/api/v5/share/create-shared-expense",
+        data,
+        { withCredentials: true }
+      );
+
+      const newExpense = response.data.data;
+
+      setSharedExpenses((prevExpenses) => [...prevExpenses, newExpense]);
+      fetchSharedExpense();
+    } catch (error) {
+      console.log("Error adding shared expense", error);
     }
   };
 
@@ -103,11 +194,20 @@ export const GlobalProvider = ({ children }) => {
         incomes,
         addExpense,
         fetchExpenses,
+        deleteExpense,
         fetchIncomes,
         totalExpense,
         totalIncome,
         deleteIncome,
         addIncome,
+        fetchUsers,
+        users,
+        fetchGroups,
+        groups,
+        removeMember,
+        sharedExpenses,
+        fetchSharedExpense,
+        createSharedExpense,
       }}
     >
       {children}
@@ -117,6 +217,6 @@ export const GlobalProvider = ({ children }) => {
 
 export const useGlobalContext = () => {
   const context = useContext(GlobalContext);
-  console.log("Global Context:", context);
+  // console.log("Global Context:", context);
   return context;
 };

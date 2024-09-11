@@ -20,10 +20,7 @@ const Income = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1 p-10 overflow-y-auto h-screen">
-        <div>
-          <h1 className="text-3xl font-bold mb-8">Total Income</h1>
-          <h2 className="text-2xl pb-6">₹{sum}</h2>
-        </div>
+        
         <div>
           <AddIncome />
         </div>

@@ -1,68 +1,24 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Sidebar from "./Sidebar.jsx";
-import axiosInstance from "../axiosInstance.jsx";
 import AddMember from "./AddMember.jsx";
+import { useGlobalContext } from "../Context/GlobalContext.jsx";
 
 const Groups = () => {
-  const [groups, setGroups] = useState([]);
-  const [users, setUsers] = useState([]);
+  const {fetchGroups, fetchUsers, groups, users, removeMember} = useGlobalContext();
 
   useEffect(() => {
-    const fetchGroups = async () => {
-      try {
-        // console.log('inside get groups');
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/v4/groups/get-groups"
-        );
-        // console.log('response', response.data);
-        setGroups(response.data);
-      } catch (err) {
-        console.log('Error fetching groups ', err);
-      }
-    };
-
-    const fetchUsers = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/v1/users/get-users"
-        );
-        // console.log(response.data);
-        setUsers(response.data);
-      } catch (error) {
-        console.log("Error fetching users", error.message);
-      }
-    };
-
     fetchGroups();
     fetchUsers();
   }, []);
 
   const handleMemberAdded = async () => {
-    try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v4/groups/get-groups"
-      ); // Refresh the groups
-      setGroups(response.data);
-    } catch (err) {
-      console.error("Error refreshing groups:", err.message);
-    }
+    fetchGroups();
   };
 
   const handleRemoveMember = async (groupId, userId) => {
     // console.log(userId, "id");
     // console.log(groupId, "groupid");
-    try {
-      await axiosInstance.delete(
-        `http://localhost:3000/api/v4/groups/remove-member/${groupId}`,
-        { data: { userId } }
-      );
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v4/groups/get-groups"
-      ); // refresh
-      setGroups(response.data);
-    } catch (error) {
-      console.log("Error removing member from group", error);
-    }
+    removeMember(groupId, userId);
   };
 
   return (
