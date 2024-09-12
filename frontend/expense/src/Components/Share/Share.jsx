@@ -1,29 +1,15 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../../axiosInstance";
+import { useEffect, useState } from "react";
 import Sidebar from "../Sidebar";
 import SettleShare from "./SettleShare";
 import AddShare from "./AddShare";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
 const Share = () => {
-  const [shares, setShares] = useState([]);
   const [showSettleShare, setShowSettleShare] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [showAddShare, setShowAddShare] = useState(false); // State for AddShare modal
+  const {fetchShares, shares, loading} = useGlobalContext();
 
   useEffect(() => {
-    const fetchShares = async () => {
-      try {
-        const response = await axiosInstance.get(
-          `http://localhost:3000/api/v7/pay-shares/get-pay-shares`
-        );
-        setShares(response.data.data);
-      } catch (error) {
-        console.log("error: ", error);
-        setLoading(false);
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchShares();
   }, []);
 

@@ -1,24 +1,14 @@
-import React, { useState, useEffect } from "react";
-import axiosInstance from "../../axiosInstance";
+import { useState, useEffect } from "react";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
 const AddShare = ({ onClose }) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [payments, setPayments] = useState([]);
   const [expenses, setExpenses] = useState([]);
-  const [users, setUsers] = useState([]); // List of users to select from
+  const { users, fetchUsers, createPayShare } = useGlobalContext();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axiosInstance.get(
-          "http://localhost:3000/api/v1/users/get-users" // Adjust the endpoint as needed
-        );
-        setUsers(response.data); // Assuming response has a 'data' field containing users
-      } catch (error) {
-        console.log("Error fetching users:", error);
-      }
-    };
     fetchUsers();
   }, []);
 
@@ -30,8 +20,7 @@ const AddShare = ({ onClose }) => {
       if (user) acc[user._id] = amount; // Use user ID from the list
       return acc;
     }, {});
-    console.log('payment ',paymentObject);
-    
+    console.log("payment ", paymentObject);
 
     const expenseObject = expenses.reduce((acc, { username, amount }) => {
       const user = users.find((user) => user.username === username);
@@ -46,17 +35,8 @@ const AddShare = ({ onClose }) => {
       expenseObject,
     };
 
-    try {
-      const response = await axiosInstance.post(
-        "http://localhost:3000/api/v7/pay-shares/create-pay-share",
-        newShare
-      );
-      console.log("Share created successfully:", response.data);
-      onClose(); // Close the modal after successful creation
-      window.location.reload();
-    } catch (error) {
-      console.log("Error creating share:", error);
-    }
+    createPayShare(newShare);
+    onClose();
   };
 
   const handlePaymentChange = (index, key, value) => {

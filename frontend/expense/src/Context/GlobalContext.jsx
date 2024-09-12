@@ -10,6 +10,9 @@ export const GlobalProvider = ({ children }) => {
   const [users, setUsers] = useState([]);
   const [groups, setGroups] = useState([]);
   const [sharedExpenses, setSharedExpenses] = useState([]);
+  const [shares, setShares] = useState([]);
+  const [settledData, setSettledData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchExpenses = useCallback(async () => {
@@ -47,7 +50,7 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
-  const deleteExpense = async () => {
+  const deleteExpense = async (id) => {
     try {
       await axiosInstance.delete(`delete-expense/${id}`, {
         withCredentials: true,
@@ -187,6 +190,42 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const fetchShares = async () => {
+    try {
+      const response = await axiosInstance.get(
+        `http://localhost:3000/api/v7/pay-shares/get-pay-shares`
+      );
+      setShares(response.data.data);
+    } catch (error) {
+      console.log("error: ", error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const createPayShare = async (newShare) => {
+    try {
+      const response = await axiosInstance.post(
+        "http://localhost:3000/api/v7/pay-shares/create-pay-share",
+        newShare
+      );
+      console.log("Share created successfully:", response.data);
+      window.location.reload();
+    } catch (error) {
+      console.log("Error creating share:", error);
+    }
+  };
+
+  const fetchReult = async () => {
+    const response = await axiosInstance.post(
+      "http://localhost:3000/api/v7/pay-shares/settle-pay-share"
+    );
+
+    console.log(response.data.totalAmount);
+    setSettledData(response.data);
+  };
+
   return (
     <GlobalContext.Provider
       value={{
@@ -208,6 +247,12 @@ export const GlobalProvider = ({ children }) => {
         sharedExpenses,
         fetchSharedExpense,
         createSharedExpense,
+        fetchShares,
+        shares,
+        loading,
+        createPayShare,
+        fetchReult,
+        settledData,
       }}
     >
       {children}

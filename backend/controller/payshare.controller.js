@@ -6,8 +6,7 @@ import User from "../models/user.model.js";
 export const createShare = async (req, res) => {
   const { description, amount, paymentObject, expenseObject } = req.body;
 
-  console.log('asdniwf',paymentObject);
-  
+  console.log("asdniwf", paymentObject);
 
   if (!description || !paymentObject || !amount || !expenseObject) {
     console.log(
@@ -95,8 +94,8 @@ export const settlePayShare = async (req, res) => {
     let amount = 0;
 
     for (const res of result) {
-      console.log('res',res);
-      
+      console.log("res", res);
+
       const user = await User.findById(res._id).select("username");
       resObject[user.username] = res.totalAmount;
       if (name === user.username) amount = res.totalAmount;
@@ -121,7 +120,7 @@ export const getPayShare = async (req, res) => {
       paymentObject: { $exists: true, $ne: null },
     }).lean();
 
-    
+/*
     // Process each share to populate paymentObject
     for (const share of payShares) {
       let populatedPayShare = {};
@@ -148,6 +147,65 @@ export const getPayShare = async (req, res) => {
       share.paymentObject = populatedPayShare;
       share.expenseObject = populatedExpenseShare;
     }
+*/
+
+    // Step 1: Collect all userIds from both paymentObject and expenseObject
+    let userIds = [];
+    payShares.forEach((share) => {
+      userIds.push(...Object.keys(share.paymentObject));
+      userIds.push(...Object.keys(share.expenseObject));
+    });
+
+    console.log('before user ids', userIds);
+    
+
+    // Remove duplicates from userIds
+    userIds = [...new Set(userIds)];
+
+    console.log('after user ids', userIds);
+
+
+    // Step 2: Fetch all users in one query
+    const users = await User.find({ _id: { $in: userIds } })
+      .select("username")
+      .lean();
+
+    
+
+    // Step 3: Create a user map for easy lookup
+    const userMap = {};
+    users.forEach((user) => {
+      userMap[user._id] = user.username;
+    });
+
+    console.log('usermap', userMap);
+    
+
+    // Step 4: Populate paymentObject and expenseObject in each share using the userMap
+    payShares.forEach((share) => {
+      const populatedPayShare = {};
+      const populatedExpenseShare = {};
+
+      // Populate paymentObject
+      for (const userId in share.paymentObject) {
+        const username = userMap[userId];
+        if (username) {
+          populatedPayShare[username] = share.paymentObject[userId];
+        }
+      }
+
+      // Populate expenseObject
+      for (const userId in share.expenseObject) {
+        const username = userMap[userId];
+        if (username) {
+          populatedExpenseShare[username] = share.expenseObject[userId];
+        }
+      }
+
+      // Replace the original objects with the populated ones
+      share.paymentObject = populatedPayShare;
+      share.expenseObject = populatedExpenseShare;
+    });
 
     console.log("populatedPayShares", payShares);
 
