@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useCallback, useContext, useState } from "react";
 import axiosInstance from "../axiosInstance";
 import { useNavigate } from "react-router-dom";
@@ -146,16 +147,25 @@ export const GlobalProvider = ({ children }) => {
     }
   };
 
+  const addMember = async (groupId, selectedUser) => {
+    try {
+      await axiosInstance.post(
+        `http://localhost:3000/api/v4/groups/add-member/${groupId}`,
+        { userId: selectedUser }
+      );
+      fetchGroups();
+    } catch (error) {
+      console.log("Error selecting user, ", error.message);
+    }
+  };
+
   const removeMember = async (groupId, userId) => {
     try {
       await axiosInstance.delete(
         `http://localhost:3000/api/v4/groups/remove-member/${groupId}`,
         { data: { userId } }
       );
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v4/groups/get-groups"
-      ); // refresh
-      setGroups(response.data);
+      fetchGroups();
     } catch (error) {
       console.log("Error removing member from group", error);
     }
@@ -184,9 +194,23 @@ export const GlobalProvider = ({ children }) => {
       const newExpense = response.data.data;
 
       setSharedExpenses((prevExpenses) => [...prevExpenses, newExpense]);
+
       fetchSharedExpense();
     } catch (error) {
       console.log("Error adding shared expense", error);
+    }
+  };
+
+  const removeSharedExpense = async (expenseId) => {
+    try {
+      await axiosInstance.delete(
+        `http://localhost:3000/api/v5/share/delete-shared-expense/${expenseId}`
+      );
+
+      fetchSharedExpense();
+    } catch (error) {
+      console.log("Error deleting shared expense", error.message);
+      alert("Error deleting shared expense");
     }
   };
 
@@ -211,7 +235,7 @@ export const GlobalProvider = ({ children }) => {
         newShare
       );
       console.log("Share created successfully:", response.data);
-      window.location.reload();
+      fetchReult();
     } catch (error) {
       console.log("Error creating share:", error);
     }
@@ -243,10 +267,12 @@ export const GlobalProvider = ({ children }) => {
         users,
         fetchGroups,
         groups,
+        addMember,
         removeMember,
         sharedExpenses,
         fetchSharedExpense,
         createSharedExpense,
+        removeSharedExpense,
         fetchShares,
         shares,
         loading,

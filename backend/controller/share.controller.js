@@ -90,7 +90,7 @@ export const getShareById = async (req, res) => {
   }
 };
 
-//This is not for final share
+//This is not for final share || go to pay share
 export const getShares = async (req, res) => {
   try {
     const shares = await Share.find().populate("paidUserId", "username").lean(); // if the keys are in strings | lean -  converts the mongoose doc to plain js object

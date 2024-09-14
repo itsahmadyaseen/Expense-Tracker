@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import axiosInstance from "../../axiosInstance";
+import { useEffect } from "react";
 import { useGlobalContext } from "../../Context/GlobalContext";
 
 const SettleShare = () => {

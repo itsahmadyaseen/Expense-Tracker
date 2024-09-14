@@ -1,27 +1,21 @@
 /* eslint-disable react/prop-types */
-import {useState} from 'react'
-import axiosInstance from '../axiosInstance';
+import { useState } from "react";
+import { useGlobalContext } from "../Context/GlobalContext";
 
-const AddMember = ({groupId, existingMembers, allUsers, onMemberAdded}) => {
+const AddMember = ({ groupId, existingMembers, allUsers, onMemberAdded }) => {
+  const [selectedUser, setSelectedUser] = useState();
+  const {addMember} = useGlobalContext();
 
-  const [selectedUser, setSelectedUser] = useState()
-
-  const handleAddMember = async () => {
-    try {
-      await axiosInstance.post(`http://localhost:3000/api/v4/groups/add-member/${groupId}`, {userId:selectedUser})
-      onMemberAdded();
-      // console.log(response.data);
-      setSelectedUser('');
-    } catch (error) {
-      console.log('Error selecting user, ',error.message);
-    }
-  }
-
+  const handleAdd = async () => {
+    addMember(groupId, selectedUser);
+    onMemberAdded();
+    setSelectedUser("");
+  };
 
   // console.log(allUsers);
   const availableUsers = allUsers.filter(
-    user => !existingMembers.some(member => member._id === user._id)
-  )
+    (user) => !existingMembers.some((member) => member._id === user._id)
+  );
 
   return (
     <div className="mt-4">
@@ -33,14 +27,16 @@ const AddMember = ({groupId, existingMembers, allUsers, onMemberAdded}) => {
           className="p-2 border rounded"
         >
           <option value="">Select a user</option>
-          {availableUsers.map(user => (
+          {availableUsers.map((user) => (
             <option key={user._id} value={user._id}>
               {user.username}
             </option>
           ))}
         </select>
         <button
-          onClick={handleAddMember}
+          onClick={() =>{ 
+            handleAdd();
+          }}
           className="ml-4 p-2 bg-blue-500 text-white rounded"
         >
           Add
@@ -48,6 +44,6 @@ const AddMember = ({groupId, existingMembers, allUsers, onMemberAdded}) => {
       </div>
     </div>
   );
-}
+};
 
-export default AddMember
+export default AddMember;

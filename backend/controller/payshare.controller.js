@@ -120,6 +120,9 @@ export const getPayShare = async (req, res) => {
       paymentObject: { $exists: true, $ne: null },
     }).lean();
 
+    console.log('here is pay', payShares);
+    
+
 /*
     // Process each share to populate paymentObject
     for (const share of payShares) {

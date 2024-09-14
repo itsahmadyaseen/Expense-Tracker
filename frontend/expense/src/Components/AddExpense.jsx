@@ -1,6 +1,4 @@
 import  { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
 import { useGlobalContext } from "../Context/GlobalContext";
 
 const AddExpense = () => {

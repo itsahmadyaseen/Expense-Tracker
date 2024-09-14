@@ -3,7 +3,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 
 const EditIncome = () => {
-  const [incomes, setIncomes] = useState({ title: "", description: "", amount: "", date: "" });
+  const [incomes, setIncomes] = useState({
+    title: "",
+    description: "",
+    amount: "",
+    date: "",
+  });
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -11,18 +16,21 @@ const EditIncome = () => {
     const fetchExpense = async () => {
       try {
         // console.log('id', id);
-        const response = await axiosInstance.get(`http://localhost:3000/api/v3/incomes/get-income/${id}`, { withCredentials: true });
+        const response = await axiosInstance.get(
+          `http://localhost:3000/api/v3/incomes/get-income/${id}`,
+          { withCredentials: true }
+        );
         const incomeData = response.data;
 
         // Format the date as YYYY-MM-DD
         const formattedDate = incomeData.date
-          ? new Date(incomeData.date).toISOString().split('T')[0] // Convert to YYYY-MM-DD format
-          : '';
+          ? new Date(incomeData.date).toISOString().split("T")[0] // Convert to YYYY-MM-DD format
+          : "";
 
         setIncomes({
           description: incomeData.description || "",
           amount: incomeData.amount || "",
-          date: formattedDate
+          date: formattedDate,
         });
       } catch (error) {
         console.error("Error fetching income", error);
@@ -38,9 +46,13 @@ const EditIncome = () => {
 
   const handleUpdate = async () => {
     try {
-      const response = await axiosInstance.put(`http://localhost:3000/api/v3/incomes/update-income/${id}`, incomes, { withCredentials: true });
-      console.log('Income updated:', response.data);
-      navigate('/income');
+      const response = await axiosInstance.put(
+        `http://localhost:3000/api/v3/incomes/update-income/${id}`,
+        incomes,
+        { withCredentials: true }
+      );
+      console.log("Income updated:", response.data);
+      navigate("/income");
     } catch (error) {
       console.error("Error updating income", error);
     }

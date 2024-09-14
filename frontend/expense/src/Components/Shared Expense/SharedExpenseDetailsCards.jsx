@@ -1,12 +1,11 @@
 /* eslint-disable react/prop-types */
-import {  useState } from "react";
-import axiosInstance from "../../axiosInstance";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
-const SharedExpenseDetailsCards = ({users, groups,  sharedExpenses }) => {
+const SharedExpenseDetailsCards = ({ users, groups, sharedExpenses }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedExpense, setSelectedExpense] = useState(null);
-  const navigate = useNavigate();
+  const { removeSharedExpense } = useGlobalContext();
 
   // useEffect(() => {
   //   console.log("kjsbdfioh", sharedExpenses);
@@ -23,20 +22,8 @@ const SharedExpenseDetailsCards = ({users, groups,  sharedExpenses }) => {
   };
 
   const handleRemoveExpense = async (expenseId) => {
-    try {
-      await axiosInstance.delete(
-        `http://localhost:3000/api/v5/share/delete-shared-expense/${expenseId}`
-      );
-
-      const expenseResponse = await axiosInstance.get(
-        "http://localhost:3000/api/v5/share/get-shared-expense"
-      );
-      console.log(expenseResponse.data.data);
-      navigate("/new-shared-expense");
-    } catch (error) {
-      console.log("Error deleting shared expense", error.message);
-      alert("Error deleting shared expense");
-    }
+    closeModal();
+    removeSharedExpense(expenseId);
   };
 
   return (
@@ -45,10 +32,8 @@ const SharedExpenseDetailsCards = ({users, groups,  sharedExpenses }) => {
         <li
           key={expense._id}
           className="p-6 m-3 border rounded-lg shadow-sm bg-white flex justify-between items-center"
-          onClick={() => openModal(expense)}
         >
-          <div>
-         
+          <div onClick={() => openModal(expense)}>
             <h2 className="text-xl font-semibold">{expense.description}</h2>
             <p className="text-xl font-semibold text-gray-800">
               ₹{expense.amount}
@@ -57,23 +42,6 @@ const SharedExpenseDetailsCards = ({users, groups,  sharedExpenses }) => {
               {new Date(expense.date).toLocaleDateString()}
             </p>
 
-            {/* {expense.paidBy !== id && (
-          <p>
-            You have to pay{" "}
-            {paidBy.map((user) => {
-              if (user._id === expense.paidBy) {
-                let indExpense = calculateIndividualExpense(expense);
-                // calculateTotals(user.username,indExpense);
-                return (
-                  <span key={user._id}>
-                    {indExpense} to {user.username}
-                  </span>
-                );
-              }
-              return null;
-            })}
-          </p>
-        )}  */}
           </div>
           <div className="flex space-x-3">
             <button
@@ -126,7 +94,9 @@ const SharedExpenseDetailsCards = ({users, groups,  sharedExpenses }) => {
                               <br />
                               {items.username}
                               {" - ₹"}
-                              {Math.round(selectedExpense.amount/group.members.length)}
+                              {Math.round(
+                                selectedExpense.amount / group.members.length
+                              )}
                             </span>
                           ))}
                         </span>

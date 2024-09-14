@@ -1,13 +1,11 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
 import Sidebar from "./Sidebar";
 import AddExpense from "./AddExpense";
 import { useGlobalContext } from "../Context/GlobalContext.jsx";
 
 const Expense = () => {
   // const [expenses, setExpenses] = useState([]);
-  const [sum, setSum] = useState(0);
   const navigate = useNavigate();
   const {deleteExpense} = useGlobalContext();
 

@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useGlobalContext } from "../../Context/GlobalContext";
 
 const AddSharedExpense = ({ groups, users }) => {
@@ -9,8 +8,7 @@ const AddSharedExpense = ({ groups, users }) => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState(0);
   const [date, setDate] = useState("");
-  const { createSharedExpense } = useGlobalContext();
-  const navigate = useNavigate();
+  const { createSharedExpense, fetchSharedExpense } = useGlobalContext();
 
   const handleAddExpense = async () => {
     createSharedExpense();
@@ -29,7 +27,7 @@ const AddSharedExpense = ({ groups, users }) => {
     setDescription("");
     setAmount("");
     setDate("");
-    navigate("/shared-expense");
+    fetchSharedExpense();
   };
 
   return (
