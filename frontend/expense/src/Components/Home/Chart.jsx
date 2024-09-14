@@ -10,10 +10,9 @@ import {
   ArcElement,
 } from "chart.js";
 import { useEffect, useState } from "react";
-
 import { Line } from "react-chartjs-2";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
+import axiosInstance from "../../axiosInstance";
 
 ChartJs.register(
   CategoryScale,
@@ -37,7 +36,6 @@ function Chart() {
         const response = await axiosInstance.get("/get-expenses", {
           withCredentials: true,
         });
-
         const fetchedExpenses = response.data.data;
         setExpenses(fetchedExpenses);
       } catch (error) {
@@ -73,40 +71,43 @@ function Chart() {
   const data = {
     labels: incomes.map((inc) => {
       const { date } = inc;
-      const newDate = new Date(date)
-        const formated = newDate.toLocaleDateString();
-      return formated;
+      const newDate = new Date(date);
+      return newDate.toLocaleDateString();
     }),
     datasets: [
       {
         label: "Income",
-        data: [
-          ...incomes.map((income) => {
-            const { amount } = income;
-            return amount;
-          }),
-        ],
+        data: incomes.map((income) => income.amount),
         backgroundColor: "green",
         tension: 0.2,
       },
       {
         label: "Expenses",
-        data: [
-          ...expenses.map((expense) => {
-            const { amount } = expense;
-            return amount;
-          }),
-        ],
+        data: expenses.map((expense) => expense.amount),
         backgroundColor: "red",
         tension: 0.2,
       },
     ],
   };
 
+  const options = {
+    responsive: true, // Ensures chart resizes
+    maintainAspectRatio: false, // Disable aspect ratio to fit any container size
+    scales: {
+      x: {
+        ticks: {
+          autoSkip: true, // Prevents overcrowding of labels
+          maxTicksLimit: 10,
+        },
+      },
+    },
+  };
+
   return (
-    <>
-      <Line data={data} />
-    </>
+    <div className="w-full h-80 md:h-[500px]">
+      <Line data={data} options={options} />
+    </div>
   );
 }
+
 export default Chart;

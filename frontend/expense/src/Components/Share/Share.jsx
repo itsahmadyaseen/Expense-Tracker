@@ -7,7 +7,7 @@ import { useGlobalContext } from "../../Context/GlobalContext";
 const Share = () => {
   const [showSettleShare, setShowSettleShare] = useState(false);
   const [showAddShare, setShowAddShare] = useState(false); // State for AddShare modal
-  const {fetchShares, shares, loading} = useGlobalContext();
+  const { fetchShares, shares, loading } = useGlobalContext();
 
   useEffect(() => {
     fetchShares();
@@ -16,10 +16,12 @@ const Share = () => {
   if (loading) {
     return (
       <div className="flex w-full h-screen">
-        <Sidebar className="flex-shrink-0" />
+        <div>
+          <Sidebar className="flex-shrink-0" />
+        </div>
         <div className="flex flex-col w-full h-full">
           <div className="flex-grow overflow-auto p-4">
-            <h1 className="text-3xl">Fetching Shares...</h1>
+            <h1 className="text-xl font-bold">Fetching Shares...</h1>
           </div>
         </div>
       </div>
@@ -27,7 +29,10 @@ const Share = () => {
   }
   return (
     <div className="flex w-full h-screen">
-      <Sidebar className="flex-shrink-0" />
+      <div>
+        <Sidebar className="flex-shrink-0" />
+      </div>
+
       <div className="flex flex-col w-full h-full">
         <div className="flex-grow overflow-auto p-4">
           <ul className="space-y-4">

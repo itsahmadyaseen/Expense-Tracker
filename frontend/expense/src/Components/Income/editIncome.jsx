@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axiosInstance from "../axiosInstance";
+import axiosInstance from "../../axiosInstance";
 
 const EditIncome = () => {
   const [incomes, setIncomes] = useState({

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useGlobalContext } from "../Context/GlobalContext";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
 const AddIncome = () => {
   const [newIncome, setNewIncome] = useState({

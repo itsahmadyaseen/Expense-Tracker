@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
-import AddExpense from "./AddExpense";
-import { useGlobalContext } from "../Context/GlobalContext.jsx";
+import Sidebar from "../Sidebar.jsx";
+import AddExpense from "./AddExpense.jsx";
+import { useGlobalContext } from "../../Context/GlobalContext.jsx";
 
 const Expense = () => {
   // const [expenses, setExpenses] = useState([]);

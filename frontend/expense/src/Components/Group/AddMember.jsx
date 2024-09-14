@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
-import { useGlobalContext } from "../Context/GlobalContext";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
 const AddMember = ({ groupId, existingMembers, allUsers, onMemberAdded }) => {
   const [selectedUser, setSelectedUser] = useState();

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
-import Sidebar from "./Sidebar.jsx";
+import Sidebar from "../Sidebar.jsx";
 import AddMember from "./AddMember.jsx";
-import { useGlobalContext } from "../Context/GlobalContext.jsx";
+import { useGlobalContext } from "../../Context/GlobalContext.jsx";
 
 const Groups = () => {
   const {fetchGroups, fetchUsers, groups, users, removeMember} = useGlobalContext();

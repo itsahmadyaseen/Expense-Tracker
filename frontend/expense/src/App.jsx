@@ -1,15 +1,15 @@
-import AddExpense from "./Components/AddExpense.jsx";
-import EditExpense from "./Components/EditExpense.jsx";
-import Home from "./Components/Home.jsx";
-import Login from "./Components/Login.jsx";
-import Profile from "./Components/Profile.jsx";
-import Signup from "./Components/Signup.jsx";
+import AddExpense from "./Components/Expense/AddExpense.jsx";
+import EditExpense from "./Components/Expense/EditExpense.jsx";
+import Home from "./Components/Home/Home.jsx";
+import Login from "./Components/User/Login.jsx";
+import Profile from "./Components/User/Profile.jsx";
+import Signup from "./Components/User/Signup.jsx";
 import { Routes, Route } from "react-router-dom";
-import Income from "./Components/Income.jsx";
-import AddIncome from "./Components/AddIncome.jsx";
-import EditIncome from "./Components/editIncome.jsx";
-import Expense from "./Components/Expense.jsx";
-import Groups from "./Components/Groups.jsx";
+import Income from "./Components/Income/Income.jsx";
+import AddIncome from "./Components/Income/AddIncome.jsx";
+import EditIncome from "./Components/Income/editIncome.jsx";
+import Expense from "./Components/Expense/Expense.jsx";
+import Groups from "./Components/Group/Groups.jsx";
 import NewSharedExpense from "./Components/Shared Expense/NewSharedExpense.jsx";
 import Share from "./Components/Share/Share.jsx";
 

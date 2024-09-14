@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import Sidebar from "../Sidebar";
 import AddIncome from "./AddIncome";
-import { useGlobalContext } from "../Context/GlobalContext";
+import { useGlobalContext } from "../../Context/GlobalContext";
 
 const Income = () => {
   const navigate = useNavigate();
