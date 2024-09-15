@@ -19,7 +19,7 @@ const Share = () => {
         <div>
           <Sidebar className="flex-shrink-0" />
         </div>
-        <div className="flex flex-col  h-full">
+        <div className="flex flex-col h-full">
           <div className="flex-grow overflow-auto p-4">
             <h1 className="text-xl font-bold">Fetching Shares...</h1>
           </div>

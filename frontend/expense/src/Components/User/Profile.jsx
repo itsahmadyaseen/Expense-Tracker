@@ -25,7 +25,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex sm:ml-64">
       <div>
         <Sidebar />
       </div>
