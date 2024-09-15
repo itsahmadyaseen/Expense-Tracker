@@ -15,11 +15,11 @@ const Share = () => {
 
   if (loading) {
     return (
-      <div className="flex w-full h-screen">
+      <div className="flex sm:ml-64 h-screen">
         <div>
           <Sidebar className="flex-shrink-0" />
         </div>
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col  h-full">
           <div className="flex-grow overflow-auto p-4">
             <h1 className="text-xl font-bold">Fetching Shares...</h1>
           </div>
@@ -28,7 +28,7 @@ const Share = () => {
     );
   }
   return (
-    <div className="flex w-full h-screen">
+    <div className="flex sm:ml-64 h-screen">
       <div>
         <Sidebar className="flex-shrink-0" />
       </div>

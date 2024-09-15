@@ -21,9 +21,9 @@ const Expense = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex sm:ml-64">
       <Sidebar />
-      <div className="flex-1 p-10 overflow-y-auto h-screen">
+      <div className="flex-1 p-7 mt-12 sm:m-0 overflow-y-auto h-screen">
         
         <div>
           <AddExpense />

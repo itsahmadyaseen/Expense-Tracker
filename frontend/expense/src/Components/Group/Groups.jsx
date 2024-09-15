@@ -22,12 +22,12 @@ const Groups = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="flex sm:ml-64">
       <div>
         <Sidebar />
       </div>
-      <div className=" w-full p-4 overflow-y-auto h-screen">
-        <h1 className="text-2xl font-bold mb-4">Groups</h1>
+      <div className="w-full p-4 overflow-y-auto h-screen mt-12 sm:m-0 ">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-4">Groups</h1>
         <ul>
           {groups.map((group) => (
             <li key={group._id} className="mb-4 p-4 border rounded shadow">

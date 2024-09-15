@@ -22,12 +22,12 @@ const NewSharedExpense = () => {
   }, []);
 
   return (
-    <div className=" flex shared-expense-container ">
+    <div className=" flex shared-expense-container sm:ml-64">
       <div>
         <Sidebar />
       </div>
-      <div className="h-screen overflow-auto w-full">
-        <div className=" p-3">
+      <div className="h-screen overflow-auto w-full mt-12 sm:m-0 p-2">
+        <div className="p-3">
           <AddSharedExpense groups={groups} users={users} />
         </div>
 

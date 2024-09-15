@@ -13,16 +13,18 @@ const Home = () => {
   }, [fetchExpenses, fetchIncomes]);
 
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex sm:ml-64 h-full">
       <Sidebar />
-      <div className="flex-1 p-4 md:p-10 overflow-y-auto h-screen">
+      <div className="flex-1 p-4 m-0 overflow-y-auto mt-12 sm:m-0 h-screen">
         <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">Total Expenses</h1>
-          <h2 className="text-xl md:text-2xl pb-4">₹{totalExpense()}</h2>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4">
+            Total Expenses
+          </h1>
+          <h2 className="text-xl sm:text-2xl pb-4">₹{totalExpense()}</h2>
         </div>
         <div className="mb-8">
-          <h1 className="text-2xl md:text-3xl font-bold mb-4">Total Incomes</h1>
-          <h2 className="text-xl md:text-2xl pb-4">₹{totalIncome()}</h2>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-4">Total Incomes</h1>
+          <h2 className="text-xl sm:text-2xl pb-4">₹{totalIncome()}</h2>
         </div>
         <div className="mb-8">
           <Chart />
