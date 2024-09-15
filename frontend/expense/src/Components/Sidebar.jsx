@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
 import { useState } from "react";
+import { FiSidebar } from "react-icons/fi";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -29,12 +30,12 @@ const Sidebar = () => {
 
   return (
     <>
-      <button
+      <FiSidebar
         onClick={toggleSidebar}
-        className="sm:hidden p-1 h-10 w-16 text- bg-indigo-600 text-white fixed top-4 left-1 z-50 rounded-sm"
+        className="sm:hidden p-1 h-10 w-16  text-black cursor-pointer fixed top-4 left-1 z-50 rounded-sm"
       >
         {isOpen ? "Close" : "Menu"}
-      </button>
+      </FiSidebar>
       <div className="flex sm:block">
         {/* Sidebar */}
         <div
