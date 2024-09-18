@@ -36,7 +36,7 @@ const Login = () => {
       localStorage.setItem("id", id);
       localStorage.setItem("token", token);
       localStorage.setItem("username", username);
-      console.log("token: ", token);
+      // console.log("token: ", token);
 
       //cookie approach
       

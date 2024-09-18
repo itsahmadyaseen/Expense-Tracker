@@ -4,7 +4,7 @@ import Home from "./Components/Home/Home.jsx";
 import Login from "./Components/User/Login.jsx";
 import Profile from "./Components/User/Profile.jsx";
 import Signup from "./Components/User/Signup.jsx";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Income from "./Components/Income/Income.jsx";
 import AddIncome from "./Components/Income/AddIncome.jsx";
 import EditIncome from "./Components/Income/editIncome.jsx";
@@ -12,10 +12,29 @@ import Expense from "./Components/Expense/Expense.jsx";
 import Groups from "./Components/Group/Groups.jsx";
 import NewSharedExpense from "./Components/Shared Expense/NewSharedExpense.jsx";
 import Share from "./Components/Share/Share.jsx";
+import Navbar from "./Components/Navbar.jsx";
+import { useEffect, useState } from "react";
+import Sidebar from "./Components/Sidebar.jsx";
 
 function App() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
   return (
     <>
+      <Navbar toggleSidebar={toggleSidebar} isOpen={isOpen}></Navbar>
+      <Sidebar isOpen={isOpen}></Sidebar>
       <Routes>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />

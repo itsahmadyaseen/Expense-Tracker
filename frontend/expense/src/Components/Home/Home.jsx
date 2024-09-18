@@ -14,7 +14,7 @@ const Home = () => {
 
   return (
     <div className="flex sm:ml-64 h-full">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-4 m-0 overflow-y-auto mt-12 sm:m-0 h-screen">
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold mb-4">

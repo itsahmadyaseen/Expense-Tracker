@@ -78,7 +78,7 @@ const Share = () => {
             ))}
           </ul>
         </div>
-        <div className="flex-shrink-0 bg-gray-100 p-4 flex justify-between">
+        <div className="fixed bottom-0 left-0 right-0 bg-gray-100 p-4 flex justify-between sm:ml-64">
           <button
             className="bg-blue-500 px-4 py-2 rounded text-white"
             onClick={() => setShowAddShare(true)} // Show AddShare modal
@@ -92,6 +92,7 @@ const Share = () => {
             Settle
           </button>
         </div>
+
         {showSettleShare && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
             <SettleShare />
