@@ -9,9 +9,10 @@ import sharedExpenseRouter from "./routes/sharedExpense.routes.js";
 import shareRouter from "./routes/share.routes.js";
 import payShareRouter from "./routes/payshare.routes.js";
 import cookieParser from "cookie-parser";
+import { configDotenv } from "dotenv";
 
 const app = express();
-
+configDotenv();
 connectDB();
 
 app.use(

@@ -49,7 +49,7 @@ export const loginUser = async (req, res) => {
           name: username,
           email: existingUser.email,
         };
-        const token = jwt.sign(authClaims, "Expense123", {
+        const token = jwt.sign(authClaims, process.env.SECRET_KEY, {
           expiresIn: "2d",
         });
         console.log("token ", token);
