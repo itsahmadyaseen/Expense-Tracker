@@ -3,9 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 export const signupUser = async (req, res) => {
-  const { username, password } = req.body;
-  console.log(username);
-  console.log(password);
+  const { username, email, password } = req.body;
 
   try {
     const existingUser = await User.findOne({ username: username });
@@ -18,7 +16,8 @@ export const signupUser = async (req, res) => {
     // console.log('hashed password', hashPassword);
 
     const newUser = new User({
-      username: req.body.username,
+      username,
+      email,
       password: hashPassword,
     });
 
@@ -45,11 +44,15 @@ export const loginUser = async (req, res) => {
       if (data) {
         // console.log('Existing user', existingUser);
         // console.log('id ', existingUser._id);
-        const authClaims = { id: existingUser._id, name: username };
+        const authClaims = {
+          id: existingUser._id,
+          name: username,
+          email: existingUser.email,
+        };
         const token = jwt.sign(authClaims, "Expense123", {
           expiresIn: "2d",
         });
-        console.log('token ',token);
+        console.log("token ", token);
 
         res.cookie("token", token, {
           maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -57,11 +60,12 @@ export const loginUser = async (req, res) => {
           sameSite: "none",
           secure: true,
         });
-        console.log('res cookie', res.cookie);
-        
+        console.log("res cookie", res.cookie);
 
         console.log("User Logged in");
-        return res.status(200).json({ id: existingUser._id, token: token, username:username});
+        return res
+          .status(200)
+          .json({ id: existingUser._id, token: token, username: username });
       } else {
         console.log("Invalid password", err);
         return res.status(400).json({ message: "Invalid password" });
@@ -95,8 +99,7 @@ export const logoutUser = async (req, res) => {
     res.cookie("token", "", {
       maxAge: 0,
       httpOnly: true,
-      secure:true,
-      
+      secure: true,
     });
     console.log("User logged out");
     return res.status(200).json({ message: "User Logged out" });
@@ -109,8 +112,8 @@ export const logoutUser = async (req, res) => {
 export const getProfile = async (req, res) => {
   try {
     const { id } = req.user;
-    console.log("req user", req.user);
-    console.log("id: ", id);
+    // console.log("req user", req.user);
+    // console.log("id: ", id);
     const user = await User.findById(id);
     if (!user) {
       console.log("Unable to fetch profile");
