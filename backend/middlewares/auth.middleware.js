@@ -5,14 +5,14 @@ export const verifyJWT = (req, res, next) => {
   const cookieToken = req.cookies.token;
 
   // console.log('auth token:', authHeader);
-  console.log("cookie token:", cookieToken);
+  // console.log("cookie token:", cookieToken);
 
-  if (!cookieToken) {
+  const token = cookieToken || req.headers["authorization"]?.split(" ")[1];
+
+  if (!token) {
     console.log("No token provided");
-    return res.status(403).json({ message: "No token provided" });
+    return res.status(401).json({ message: "No token provided" });
   }
-
-  const token = cookieToken;
 
   console.log("Extracted token:", token);
 
