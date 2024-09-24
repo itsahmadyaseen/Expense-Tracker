@@ -1,7 +1,6 @@
+/* eslint-disable react/prop-types */
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../axiosInstance";
-import { useState } from "react";
-import { FiSidebar } from "react-icons/fi";
 
 const Sidebar = ({ isOpen }) => {
   const navigate = useNavigate();

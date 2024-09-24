@@ -1,4 +1,4 @@
-import { useState } from "react";
+/* eslint-disable react/prop-types */
 import { FiSidebar } from "react-icons/fi";
 const Navbar = ({ toggleSidebar, isOpen }) => {
   const username = localStorage.getItem("username");
