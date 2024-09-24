@@ -32,6 +32,6 @@ app.use("/api/v5/share", sharedExpenseRouter);
 app.use("/api/v6/new-shares", shareRouter);
 app.use("/api/v7/pay-shares", payShareRouter);
 
-app.listen(3000, () => {
-  console.log("Running on port ", 3000);
+app.listen(process.env.PORT || 3000, () => {
+  console.log("Running on port", process.env.PORT);
 });

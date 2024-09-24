@@ -1,4 +1,3 @@
-import Sidebar from "../Sidebar";
 import Chart from "./Chart";
 import { useGlobalContext } from "../../Context/GlobalContext";
 import { useEffect } from "react";
