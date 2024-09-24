@@ -24,13 +24,13 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/v1/users", userRouter);
-app.use("/api/v2/expenses", expenseRouter);
-app.use("/api/v3/incomes", incomeRouter);
-app.use("/api/v4/groups", groupRouter);
-app.use("/api/v5/share", sharedExpenseRouter);
-app.use("/api/v6/new-shares", shareRouter);
-app.use("/api/v7/pay-shares", payShareRouter);
+app.use("/api/users", userRouter);
+app.use("/api/expenses", expenseRouter);
+app.use("/api/incomes", incomeRouter);
+app.use("/api/groups", groupRouter);
+app.use("/api/share", sharedExpenseRouter);
+app.use("/api/new-shares", shareRouter);
+app.use("/api/pay-shares", payShareRouter);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Running on port", process.env.PORT);
