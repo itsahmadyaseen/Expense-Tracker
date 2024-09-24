@@ -41,7 +41,7 @@ const EditExpense = () => {
     try {
       const response = await axiosInstance.put(`/update-expense/${id}`, expense, { withCredentials: true });
       console.log('Expense updated:', response.data);
-      navigate('/');
+      navigate('/expense');
     } catch (error) {
       console.error("Error updating expense", error);
     }
