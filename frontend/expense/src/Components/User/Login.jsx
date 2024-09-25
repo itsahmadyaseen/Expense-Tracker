@@ -23,7 +23,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "https://expense-tracker-frontend-ep66.onrender.com/users/login",
+        "https://expense-tracker-frontend-ep66.onrender.com/api/users/login",
         formData,
         { withCredentials: true }
       );
