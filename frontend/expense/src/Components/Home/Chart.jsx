@@ -33,7 +33,7 @@ function Chart() {
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axiosInstance.get("/get-expenses", {
+        const response = await axiosInstance.get("expenses/get-expenses", {
           withCredentials: true,
         });
         const fetchedExpenses = response.data.data;
@@ -49,7 +49,7 @@ function Chart() {
     const fetchIncomes = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:3000/api/v3/incomes/get-incomes",
+          "http://localhost:3000/api/incomes/get-incomes",
           {
             withCredentials: true,
           }

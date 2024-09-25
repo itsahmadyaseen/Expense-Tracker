@@ -18,12 +18,9 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchExpenses = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v2/expenses/get-expenses",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axiosInstance.get("/expenses/get-expenses", {
+        withCredentials: true,
+      });
 
       console.log("response - ", response.data.data);
 
@@ -38,9 +35,13 @@ export const GlobalProvider = ({ children }) => {
 
   const addExpense = async (newExpense) => {
     try {
-      const response = await axiosInstance.post("/create-expense", newExpense, {
-        withCredentials: true,
-      });
+      const response = await axiosInstance.post(
+        "/expenses/create-expense",
+        newExpense,
+        {
+          withCredentials: true,
+        }
+      );
       console.log("Expense created:", response.data);
       setExpenses((prevExpenses) => [...prevExpenses, response.data]);
 
@@ -53,7 +54,7 @@ export const GlobalProvider = ({ children }) => {
 
   const deleteExpense = async (id) => {
     try {
-      await axiosInstance.delete(`delete-expense/${id}`, {
+      await axiosInstance.delete(`/expenses/delete-expense/${id}`, {
         withCredentials: true,
       });
       const updatedExpenses = expenses.filter((exp) => exp._id !== id);
@@ -70,12 +71,9 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchIncomes = useCallback(async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v3/incomes/get-incomes",
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axiosInstance.get("/incomes/get-incomes", {
+        withCredentials: true,
+      });
       const fetchedIncomes = response.data;
 
       setIncomes(fetchedIncomes);
@@ -93,12 +91,9 @@ export const GlobalProvider = ({ children }) => {
 
   const deleteIncome = async (id) => {
     try {
-      await axiosInstance.delete(
-        `http://localhost:3000/api/v3/incomes/delete-income/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      await axiosInstance.delete(`/incomes/delete-income/${id}`, {
+        withCredentials: true,
+      });
       const updatedIncomes = incomes.filter((exp) => exp._id !== id);
       setIncomes(updatedIncomes);
     } catch (error) {
@@ -108,11 +103,9 @@ export const GlobalProvider = ({ children }) => {
 
   const addIncome = async (newIncome) => {
     try {
-      await axiosInstance.post(
-        "http://localhost:3000/api/v3/incomes/create-Income",
-        newIncome,
-        { withCredentials: true }
-      );
+      await axiosInstance.post("/incomes/create-Income", newIncome, {
+        withCredentials: true,
+      });
       console.log("added ");
 
       //   navigate("/income");
@@ -124,9 +117,7 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v1/users/get-users"
-      );
+      const response = await axiosInstance.get("/users/get-users");
       // console.log(response.data);
       setUsers(response.data);
     } catch (error) {
@@ -137,9 +128,7 @@ export const GlobalProvider = ({ children }) => {
   const fetchGroups = async () => {
     try {
       // console.log('inside get groups');
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v4/groups/get-groups"
-      );
+      const response = await axiosInstance.get("/groups/get-groups");
       // console.log('response', response.data);
       setGroups(response.data);
     } catch (err) {
@@ -149,10 +138,9 @@ export const GlobalProvider = ({ children }) => {
 
   const addMember = async (groupId, selectedUser) => {
     try {
-      await axiosInstance.post(
-        `http://localhost:3000/api/v4/groups/add-member/${groupId}`,
-        { userId: selectedUser }
-      );
+      await axiosInstance.post(`/groups/add-member/${groupId}`, {
+        userId: selectedUser,
+      });
       fetchGroups();
     } catch (error) {
       console.log("Error selecting user, ", error.message);
@@ -161,10 +149,9 @@ export const GlobalProvider = ({ children }) => {
 
   const removeMember = async (groupId, userId) => {
     try {
-      await axiosInstance.delete(
-        `http://localhost:3000/api/v4/groups/remove-member/${groupId}`,
-        { data: { userId } }
-      );
+      await axiosInstance.delete(`/groups/remove-member/${groupId}`, {
+        data: { userId },
+      });
       fetchGroups();
     } catch (error) {
       console.log("Error removing member from group", error);
@@ -173,9 +160,7 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchSharedExpense = async () => {
     try {
-      const response = await axiosInstance.get(
-        "http://localhost:3000/api/v5/share/get-shared-expense"
-      );
+      const response = await axiosInstance.get("/share/get-shared-expense");
       // console.log("sharedExpenses", response.data.data);
       setSharedExpenses(response.data.data);
     } catch (error) {
@@ -186,7 +171,7 @@ export const GlobalProvider = ({ children }) => {
   const createSharedExpense = async (data) => {
     try {
       const response = await axiosInstance.post(
-        "http://localhost:3000/api/v5/share/create-shared-expense",
+        "/share/create-shared-expense",
         data,
         { withCredentials: true }
       );
@@ -203,9 +188,7 @@ export const GlobalProvider = ({ children }) => {
 
   const removeSharedExpense = async (expenseId) => {
     try {
-      await axiosInstance.delete(
-        `http://localhost:3000/api/v5/share/delete-shared-expense/${expenseId}`
-      );
+      await axiosInstance.delete(`/share/delete-shared-expense/${expenseId}`);
 
       fetchSharedExpense();
     } catch (error) {
@@ -216,9 +199,7 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchShares = async () => {
     try {
-      const response = await axiosInstance.get(
-        `http://localhost:3000/api/v7/pay-shares/get-pay-shares`
-      );
+      const response = await axiosInstance.get(`/pay-shares/get-pay-shares`);
       setShares(response.data.data);
     } catch (error) {
       console.log("error: ", error);
@@ -231,7 +212,7 @@ export const GlobalProvider = ({ children }) => {
   const createPayShare = async (newShare) => {
     try {
       const response = await axiosInstance.post(
-        "http://localhost:3000/api/v7/pay-shares/create-pay-share",
+        "/pay-shares/create-pay-share",
         newShare
       );
       console.log("Share created successfully:", response.data);
@@ -242,9 +223,7 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const fetchReult = async () => {
-    const response = await axiosInstance.post(
-      "http://localhost:3000/api/v7/pay-shares/settle-pay-share"
-    );
+    const response = await axiosInstance.post("/pay-shares/settle-pay-share");
 
     console.log(response.data.totalAmount);
     setSettledData(response.data);
