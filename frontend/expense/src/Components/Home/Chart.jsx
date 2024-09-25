@@ -49,7 +49,7 @@ function Chart() {
     const fetchIncomes = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:3000/api/incomes/get-incomes",
+          "https://expense-tracker-frontend-ep66.onrender.com/api/incomes/get-incomes",
           {
             withCredentials: true,
           }

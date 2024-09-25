@@ -9,7 +9,7 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         const response = await axiosInstance.get(
-          "http://localhost:3000/api/v1/users/profile"
+          "https://expense-tracker-frontend-ep66.onrender.com/api/users/profile"
         );
         setUser(response.data);
       } catch (error) {

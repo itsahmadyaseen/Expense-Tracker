@@ -8,7 +8,7 @@ const Sidebar = ({ isOpen }) => {
 
   const handleLogout = async () => {
     try {
-      await axiosInstance.post(`http://localhost:3000/api/v1/users/logout`, {
+      await axiosInstance.post(`https://expense-tracker-frontend-ep66.onrender.com/api/users/logout`, {
         withCredentials: true,
       });
       console.log("User logged out");

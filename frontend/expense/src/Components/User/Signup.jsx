@@ -21,7 +21,7 @@ const Signup = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/users/signup",
+        "https://expense-tracker-frontend-ep66.onrender.com/api/users/signup",
         formData
       );
       console.log("Signup successfull", response.data);
