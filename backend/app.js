@@ -17,7 +17,10 @@ connectDB();
 
 app.use(
   cors({
-    origin: "https://expense-tracker-frontend-ep66.onrender.com",
+    origin: [
+      "http://localhost:5173",
+      "https://expense-tracker-frontend-ep66.onrender.com",
+    ],
     credentials: true,
   })
 );

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import axiosInstance from "../axiosInstance";
-import axios from "axios";
+import axiosInstance from "../../axiosInstance";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -22,12 +22,12 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "https://expense-tracker-frontend-ep66.onrender.com/api/users/login",
+      const response = await axiosInstance.post(
+        "/users/login",
         formData,
         { withCredentials: true }
       );
-      console.log("Login successfull", response.data);
+      console.log("Login successfull", response.data.token);
 
       const token = response.data.token;
       const id = response.data.id;
