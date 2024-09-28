@@ -17,7 +17,7 @@ const EditIncome = () => {
       try {
         // console.log('id', id);
         const response = await axiosInstance.get(
-          `https://expense-tracker-frontend-ep66.onrender.com/api/v3/incomes/get-income/${id}`,
+          `/incomes/get-incomes/${id}`,
           { withCredentials: true }
         );
         const incomeData = response.data;
@@ -47,7 +47,7 @@ const EditIncome = () => {
   const handleUpdate = async () => {
     try {
       const response = await axiosInstance.put(
-        `https://expense-tracker-frontend-ep66.onrender.com/api/v3/incomes/update-income/${id}`,
+        `/incomes/update-income/${id}`,
         incomes,
         { withCredentials: true }
       );

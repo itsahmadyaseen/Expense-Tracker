@@ -10,7 +10,7 @@ const EditExpense = () => {
   useEffect(() => {
     const fetchExpense = async () => {
       try {
-        const response = await axiosInstance.get(`/get-expense/${id}`, { withCredentials: true });
+        const response = await axiosInstance.get(`/get-expenses/${id}`, { withCredentials: true });
         console.log('Fetched expense data:', response.data);
 
         const expenseData = response.data;

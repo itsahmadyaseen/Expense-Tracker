@@ -22,8 +22,6 @@ export const GlobalProvider = ({ children }) => {
         withCredentials: true,
       });
 
-      console.log("response - ", response.data.data);
-
       setExpenses(response.data.data);
     } catch (error) {
       console.error("Error fetching expenses", error);
@@ -106,9 +104,7 @@ export const GlobalProvider = ({ children }) => {
       await axiosInstance.post("/incomes/create-Income", newIncome, {
         withCredentials: true,
       });
-      console.log("added ");
 
-      //   navigate("/income");
       await fetchIncomes();
     } catch (error) {
       console.error("Error creating Income", error);
@@ -127,9 +123,7 @@ export const GlobalProvider = ({ children }) => {
 
   const fetchGroups = async () => {
     try {
-      // console.log('inside get groups');
       const response = await axiosInstance.get("/groups/get-groups");
-      // console.log('response', response.data);
       setGroups(response.data);
     } catch (err) {
       console.log("Error fetching groups ", err);
@@ -161,7 +155,6 @@ export const GlobalProvider = ({ children }) => {
   const fetchSharedExpense = async () => {
     try {
       const response = await axiosInstance.get("/share/get-shared-expense");
-      // console.log("sharedExpenses", response.data.data);
       setSharedExpenses(response.data.data);
     } catch (error) {
       console.log("Error fetching shared expense", error);
@@ -211,11 +204,7 @@ export const GlobalProvider = ({ children }) => {
 
   const createPayShare = async (newShare) => {
     try {
-      const response = await axiosInstance.post(
-        "/pay-shares/create-pay-share",
-        newShare
-      );
-      console.log("Share created successfully:", response.data);
+      await axiosInstance.post("/pay-shares/create-pay-share", newShare);
       fetchReult();
     } catch (error) {
       console.log("Error creating share:", error);
@@ -223,10 +212,13 @@ export const GlobalProvider = ({ children }) => {
   };
 
   const fetchReult = async () => {
-    const response = await axiosInstance.post("/pay-shares/settle-pay-share");
+    try {
+      const response = await axiosInstance.post("/pay-shares/settle-pay-share");
 
-    console.log(response.data.totalAmount);
-    setSettledData(response.data);
+      setSettledData(response.data);
+    } catch (error) {
+      console.log("Error creating share:", error);
+    }
   };
 
   return (

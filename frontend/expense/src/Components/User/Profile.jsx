@@ -8,9 +8,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axiosInstance.get(
-          "https://expense-tracker-frontend-ep66.onrender.com/api/users/profile"
-        );
+        const response = await axiosInstance.get("/users/profile");
         setUser(response.data);
       } catch (error) {
         console.error("Error fetching user data", error);
