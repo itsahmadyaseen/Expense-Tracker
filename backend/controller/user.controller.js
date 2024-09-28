@@ -27,7 +27,7 @@ export const signupUser = async (req, res) => {
     return res.status(201).json({ message: "User signed up" });
   } catch (error) {
     console.log("Unable to signup", error);
-    return res.status(400).json({ message: "Unable sign up" });
+    return res.status(500).json({ message: "Unable sign up" });
   }
 };
 
@@ -53,7 +53,7 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign(authClaims, process.env.SECRET_KEY, {
           expiresIn: "2d",
         });
-        console.log("token ", token);
+        // console.log("token ", token);
 
         res.cookie("token", token, {
           maxAge: 2 * 24 * 60 * 60 * 1000,
@@ -75,7 +75,7 @@ export const loginUser = async (req, res) => {
     });
   } catch (error) {
     console.log("Unable Log in");
-    return res.status(400).json({ message: "Unable log in" });
+    return res.status(500).json({ message: "Unable log in" });
   }
 };
 
@@ -88,7 +88,7 @@ export const deleteUser = async (req, res) => {
       return res.status(400).json({ message: "Unable to delete user" });
     }
 
-    console.log("User deleted ", userId);
+    console.log("User deleted ");
     return res.status(200).json({ message: "User deleted" });
   } catch (error) {
     console.log("Error deleting user", error);
@@ -107,7 +107,7 @@ export const logoutUser = async (req, res) => {
     return res.status(200).json({ message: "User Logged out" });
   } catch (error) {
     console.log("Unable to Log out");
-    return res.status(400).json({ message: "Unable to log out" });
+    return res.status(500).json({ message: "Unable to log out" });
   }
 };
 
@@ -125,7 +125,7 @@ export const getProfile = async (req, res) => {
     return res.status(200).json(user);
   } catch (error) {
     console.log("Unable to fetch profile", error);
-    return res.status(400).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -137,11 +137,11 @@ export const getUsers = async (req, res) => {
       return res.status(404).json({ message: "Unable to fetch users" });
     }
 
-    console.log(" fetched users", users);
+    console.log(" fetched users");
     return res.status(200).json(users);
   } catch (error) {
     console.log("Unable to fetch profile", error);
-    return res.status(400).json(error);
+    return res.status(500).json(error);
   }
 };
 
@@ -214,8 +214,8 @@ export const resetPassword = async (req, res) => {
       { password: hashedPassword }
     );
 
-    console.log("Password reset successfully");
-    return res.status(200).json({ message: "Password reset successfully" });
+    console.log("Password reset successfull");
+    return res.status(200).json({ message: "Password reset successfull" });
   } catch (error) {
     console.log("Error resetting password", error);
     return res

@@ -6,8 +6,6 @@ import User from "../models/user.model.js";
 export const createShare = async (req, res) => {
   const { description, amount, paymentObject, expenseObject } = req.body;
 
-  console.log("asdniwf", paymentObject);
-
   if (!description || !paymentObject || !amount || !expenseObject) {
     console.log(
       "Provide all details :",
@@ -39,14 +37,14 @@ export const createShare = async (req, res) => {
         resultObject[new mongoose.Types.ObjectId(key)] = paymentObject[key];
       }
     }
-    console.log(resultObject);
+    // console.log(resultObject);
 
     try {
       const newPayShareInd = new PayShareInd({
         resultObject,
         shareId: newShare._id,
       });
-      console.log("New Share Individual", newPayShareInd);
+      // console.log("New Share Individual", newPayShareInd);
       await newPayShareInd.save();
     } catch (error) {
       console.log("Error creating Individual pay share", error);
@@ -87,14 +85,14 @@ export const settlePayShare = async (req, res) => {
       },
     ]);
 
-    console.log(result);
-    console.log(name);
+    // console.log(result);
+    // console.log(name);
 
     const resObject = {};
     let amount = 0;
 
     for (const res of result) {
-      console.log("res", res);
+      // console.log("res", res);
 
       const user = await User.findById(res._id).select("username");
       resObject[user.username] = res.totalAmount;
@@ -120,10 +118,9 @@ export const getPayShare = async (req, res) => {
       paymentObject: { $exists: true, $ne: null },
     }).lean();
 
-    console.log('here is pay', payShares);
-    
+    // console.log('here is pay', payShares);
 
-/*
+    /*
     // Process each share to populate paymentObject
     for (const share of payShares) {
       let populatedPayShare = {};
@@ -159,21 +156,17 @@ export const getPayShare = async (req, res) => {
       userIds.push(...Object.keys(share.expenseObject));
     });
 
-    console.log('before user ids', userIds);
-    
+    // console.log('before user ids', userIds);
 
     // Remove duplicates from userIds
     userIds = [...new Set(userIds)];
 
-    console.log('after user ids', userIds);
-
+    // console.log('after user ids', userIds);
 
     // Step 2: Fetch all users in one query
     const users = await User.find({ _id: { $in: userIds } })
       .select("username")
       .lean();
-
-    
 
     // Step 3: Create a user map for easy lookup
     const userMap = {};
@@ -181,8 +174,7 @@ export const getPayShare = async (req, res) => {
       userMap[user._id] = user.username;
     });
 
-    console.log('usermap', userMap);
-    
+    // console.log('usermap', userMap);
 
     // Step 4: Populate paymentObject and expenseObject in each share using the userMap
     payShares.forEach((share) => {
@@ -210,7 +202,7 @@ export const getPayShare = async (req, res) => {
       share.expenseObject = populatedExpenseShare;
     });
 
-    console.log("populatedPayShares", payShares);
+    // console.log("populatedPayShares", payShares);
 
     // Send the response back with the populated data
     res.status(200).json({ message: "Fetched pay shares", data: payShares });

@@ -11,7 +11,7 @@ export const createGroup = async (req, res) => {
       return res.status(400).json(savedGroup);
     }
 
-    console.log("Group created", newGroup);
+    console.log("Group created");
     return res.status(201).json(newGroup);
   } catch (error) {
     console.log("Error creating group", error);
@@ -28,7 +28,7 @@ export const getGroups = async (req, res) => {
       return res.status(404).json(groups);
     }
 
-    console.log("Groups: ", groups);
+    console.log("Groups");
     return res.status(200).json(groups);
   } catch (error) {
     console.log("Error fetching group", error);
@@ -80,7 +80,6 @@ export const removeMemberFromGroup = async (req, res) => {
   try {
     const { groupId } = req.params;
     const { userId } = req.body;
-    console.log(userId);
     if (!userId) {
       console.log("User id is not provided here", userId);
       return res.status(404).json(userId);

@@ -37,7 +37,7 @@ export const createShare = async (req, res) => {
           amount: value,
           shareId: newShare.id,
         });
-        console.log("New Share Individual", newShareIndividual);
+        console.log("New Share Individual created");
         await newShareIndividual.save();
       } catch (error) {
         console.log("Error creating Individual share", error);
@@ -69,13 +69,13 @@ export const getShareById = async (req, res) => {
   }
   try {
     const shareDetails = await Share.findById(shareId);
-    console.log("share details:", shareDetails);
+    // console.log("share details:", shareDetails);
 
     const individualShareDetails = await shareIndividual.find({
       shareId: shareId,
     });
 
-    console.log("Individual Share Details:", individualShareDetails);
+    console.log("Individual Share Details:");
 
     return res.status(200).json({
       message: "Share details fetched",
@@ -108,13 +108,13 @@ export const getShares = async (req, res) => {
       for (let userId in share.expenseObject) {
         const user = await User.findById(userId).select("username").lean();
         if (user) {
-          populatedExpenseObject[user.username] = share.expenseObject[userId]; 
-          //Assigns the username from the User document as a key in populatedExpenseObject.      
+          populatedExpenseObject[user.username] = share.expenseObject[userId];
+          //Assigns the username from the User document as a key in populatedExpenseObject.
           // The value is the amount that was originally stored under the userId key in expenseObject.
         }
       }
       share.expenseObject = populatedExpenseObject; // replace with new one
-      console.log("populatedExpenseObject", populatedExpenseObject);
+      // console.log("populatedExpenseObject", populatedExpenseObject);
     }
 
     if (!shares) {
@@ -124,7 +124,7 @@ export const getShares = async (req, res) => {
         .json({ message: "Cannot find shares :", data: shares });
     }
 
-    console.log("Shares fetched :", shares);
+    console.log("Shares fetched ");
     return res.status(200).json({ message: "Shares fetched :", data: shares });
   } catch (error) {
     console.log("Error fetching shares :", error);
@@ -150,7 +150,7 @@ export const settleShare = async (req, res) => {
       .filter((user) => user.id !== myId)
       .map((user) => user.id);
 
-    console.log("user ids : ", userIds);
+    // console.log("user ids : ", userIds);
 
     const responseArray = [];
 
@@ -205,7 +205,7 @@ export const settleShare = async (req, res) => {
       responseArray.push(responseObject);
       // console.log("share individual details:", shareDetails);
 
-      console.log("total:", totalAmount);
+      // console.log("total:", totalAmount);
     }
 
     for (const debUserId of userIds) {
@@ -255,10 +255,10 @@ export const settleShare = async (req, res) => {
       responseArray.push(responseObject);
       // console.log("share individual details:", shareDetails);
 
-      console.log("total:", totalAmount);
+      // console.log("total:", totalAmount);
     }
 
-    console.log("Last Response", responseArray);
+    // console.log("Last Response", responseArray);
     return res
       .status(200)
       .json({ message: "Amount settled : ", data: responseArray });

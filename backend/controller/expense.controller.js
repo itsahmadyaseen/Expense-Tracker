@@ -4,7 +4,6 @@ import { ObjectId } from "mongodb";
 export const createExpense = async (req, res) => {
   const { description, amount, date } = req.body;
 
-  console.log("id ", req.user.id);
   try {
     if (!req.user || !req.user.id) {
       return res.status(400).send("User information is missing");
@@ -18,22 +17,21 @@ export const createExpense = async (req, res) => {
     });
     const expense = await newExpense.save();
     console.log("Expense created");
-    res.json(expense);
+    return res.status(201).json(expense);
   } catch (error) {
     console.log("Unable to create expense", error);
-    res.json(error);
+    return res.status(500).json(error);
   }
 };
 
 export const getExpenses = async (req, res) => {
   try {
     let userId = req.user.id;
-    console.log("user iid", userId);
 
     const expenses = await Expense.find({ user: userId }).sort({
       date: -1,
     });
-    console.log(expenses);
+    // console.log(expenses);
     return res
       .status(200)
       .json({ message: "Expenses fetched", data: expenses });
@@ -69,8 +67,8 @@ export const updateExpense = async (req, res) => {
       date: date,
     });
 
-    console.log("User updated ", response);
-    return res.status(200).json(response);
+    console.log("User updated ");
+    return res.status(200).json("User updated");
   } catch (error) {
     console.log("User updation failed ", error);
     return res.status(500).json({ error });
@@ -79,15 +77,13 @@ export const updateExpense = async (req, res) => {
 
 export const getExpenseById = async (req, res) => {
   try {
-    console.log("inside get expense");
     const id = req.params.id;
-    console.log(id);
     const getExpense = await Expense.findById(id);
     if (!getExpense) {
       console.log("User fetch failed ", getExpense);
       return res.status(404).json({ message: "Expense fetch failed" });
     }
-    console.log("Expense fetched", getExpense);
+    console.log("Expense fetched");
     return res.status(200).json(getExpense);
   } catch (error) {
     console.log("Expense fetch failed ", error);

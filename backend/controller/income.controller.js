@@ -15,32 +15,31 @@ export const createIncome = async (req, res) => {
       date: date || Date.now(),
     });
     await newIncome.save();
-    console.log("Income created", newIncome);
+    console.log("Income created");
     return res.status(201).json(newIncome);
   } catch (error) {
     console.log("Income creation failed", error);
-    return res.status(401).json(error);
+    return res.status(500).json(error);
   }
 };
 
 export const getIncome = async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log("user id", userId);
     if (!userId) {
       console.log("User id not provided", userId);
       return res.status(404).json(userId);
     }
-    const income = await Income.find({ user: userId }).sort({date:-1});
+    const income = await Income.find({ user: userId }).sort({ date: -1 });
     if (!income) {
       console.log("Unable to get incomes");
       return res.status(401).json(income);
     }
-    console.log("Income fetched", income);
+    console.log("Income fetched");
     return res.status(200).json(income);
   } catch (error) {
     console.log("Income fetch failed", error);
-    return res.status(401).json(error);
+    return res.status(500).json(error);
   }
 };
 
@@ -54,11 +53,11 @@ export const getIncomeById = async (req, res) => {
 
     const income = await Income.findById(incomeId);
 
-    console.log("Income fetched", income);
+    console.log("Income fetched");
     return res.status(200).json(income);
   } catch (error) {
     console.log("Unable to get income", error);
-    return res.status(400).json(error);
+    return res.status(500).json(error);
   }
 };
 
@@ -74,11 +73,11 @@ export const deleteIncome = async (req, res) => {
       console.log("Income deletion failed", response);
       return res.status(401).json(response);
     }
-    console.log("Income deleted ", response);
-    return res.status(200).json(response);
+    console.log("Income deleted ");
+    return res.status(200).json("Income deleted");
   } catch (error) {
     console.log(" failed to delete income ", error);
-    return res.status(401).json(error);
+    return res.status(500).json(error);
   }
 };
 
@@ -90,17 +89,21 @@ export const updateIncome = async (req, res) => {
       console.log("Income id not provided", incomeId);
       return res.status(400).json(incomeId);
     }
-    const response = await Income.findByIdAndUpdate(incomeId, {
-      description: description,
-      amount: amount,
-      date: date || Date.now(),
-    } , { new: true });
+    const response = await Income.findByIdAndUpdate(
+      incomeId,
+      {
+        description: description,
+        amount: amount,
+        date: date || Date.now(),
+      },
+      { new: true }
+    );
     if (!response) {
       console.log("Income updation failed", response);
       return res.status(404).json(response);
     }
-    console.log("Income updated ", response);
-    return res.status(200).json(response);
+    console.log("Income updated ");
+    return res.status(200).json("income updated");
   } catch (error) {
     console.log("Income updation failed", error);
     return res.status(500).json(error);
