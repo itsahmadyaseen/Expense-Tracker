@@ -63,8 +63,6 @@ export const createShare = async (req, res) => {
 };
 
 export const settlePayShare = async (req, res) => {
-  const { name } = req.user;
-
   try {
     const result = await PayShareInd.aggregate([
       {
@@ -81,29 +79,31 @@ export const settlePayShare = async (req, res) => {
         $group: {
           _id: "$resultArray.k",
           totalAmount: { $sum: "$resultArray.v" },
+          resultss: { $push: "$resultArray" },
         },
       },
     ]);
 
-    // console.log(result);
-    // console.log(name);
+    console.log(JSON.stringify(result, null, 2));
 
-    const resObject = {};
+    // const resObject = {};
     let amount = 0;
 
     for (const res of result) {
-      // console.log("res", res);
-
-      const user = await User.findById(res._id).select("username");
-      resObject[user.username] = res.totalAmount;
-      if (name === user.username) amount = res.totalAmount;
+      // resObject[user.username] = res.totalAmount;
+      if (req.user.id === res._id) {
+        amount = res.totalAmount;
+      }
     }
     if (amount >= 0) console.log("You are at lead by ", amount);
     else console.log("You are trailing by", Math.abs(amount));
 
-    return res
-      .status(200)
-      .json({ message: "Settled", username: name, totalAmount: amount });
+    return res.status(200).json({
+      message: "Settled",
+      // username: name,
+      res: result,
+      totalAmount: amount,
+    });
   } catch (error) {
     console.log("Error settling share:", error);
     return res
@@ -118,7 +118,7 @@ export const getPayShare = async (req, res) => {
       paymentObject: { $exists: true, $ne: null },
     }).lean();
 
-    // console.log('here is pay', payShares);
+    console.log("here is pay", payShares);
 
     /*
     // Process each share to populate paymentObject

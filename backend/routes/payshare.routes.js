@@ -1,8 +1,10 @@
 import Router from "express";
 import { verifyJWT } from "../middlewares/auth.middleware.js";
-import { createShare, getPayShare, settlePayShare } from "../controller/payshare.controller.js";
-
-
+import {
+  createShare,
+  getPayShare,
+  settlePayShare,
+} from "../controller/payshare.controller.js";
 
 const router = Router();
 

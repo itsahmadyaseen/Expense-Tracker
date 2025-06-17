@@ -258,7 +258,7 @@ export const settleShare = async (req, res) => {
       // console.log("total:", totalAmount);
     }
 
-    // console.log("Last Response", responseArray);
+    console.log("Last Response", responseArray);
     return res
       .status(200)
       .json({ message: "Amount settled : ", data: responseArray });

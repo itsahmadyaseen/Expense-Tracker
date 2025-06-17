@@ -7,7 +7,7 @@ export const verifyJWT = (req, res, next) => {
   // console.log('auth token:', authHeader);
   // console.log("cookie token:", cookieToken);
 
-  const token = cookieToken || req.headers["authorization"]?.split(" ")[1];
+  const token = cookieToken || req.headers["Authorization"]?.split(" ")[1];
 
   if (!token) {
     console.log("No token provided");
